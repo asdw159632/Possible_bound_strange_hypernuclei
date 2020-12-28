@@ -15,10 +15,11 @@ TOP     := $(shell pwd)/
 OBJ     := $(TOP)obj/
 BIN     := $(TOP)bin/
 LIB     := lib/
+MYLIB   := ../mylib/*.o
+MYINC		:= ../myinc
 SRC     := $(TOP)src/
 MAIN    := $(TOP)main/
 INC     := $(TOP)src/
-MYINC		:= $(HOME)/myinc
 #STAF    := $(TOP)staf/
 #STAFINC := $(STAF)inc/
 
@@ -115,7 +116,7 @@ all: analysis
 
 
 analysis : $(OBJS)
-	$(LD) $(LDFLAGS) $(LDINC) $(XM_LIBS) $^ $(LDLIB) $(ROOTLIBS) $(ROOTLOADLIBS) $(GFLIBS) -o $(BIN)$(notdir $@)
+	$(LD) $(LDFLAGS) $(LDINC) $(XM_LIBS) $^ $(LDLIB) $(ROOTLIBS) $(ROOTLOADLIBS) $(MYLIB) $(GFLIBS) -o $(BIN)$(notdir $@)
 	@echo
 
 

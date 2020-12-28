@@ -15,11 +15,11 @@ TOP     := $(shell pwd)/
 OBJ     := $(TOP)obj/
 BIN     := $(TOP)bin/
 LIB     := lib/
-MYLIB   := $(HOME)/mylib/*.o
+MYLIB   := ../mylib/*.o
+MYINC		:= ../myinc
 SRC     := $(TOP)src/
 MAIN    := $(TOP)main/
 INC     := $(TOP)src/
-MYINC		:= $(HOME)/myinc
 #STAF    := $(TOP)staf/
 #STAFINC := $(STAF)inc/
 
