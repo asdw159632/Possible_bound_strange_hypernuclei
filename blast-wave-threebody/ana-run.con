@@ -1,0 +1,12 @@
+##+IsPickleJob = true
+##requirements = TARGET.IsPickleSlot
+Universe     = vanilla
+Notification = Error
+Initialdir = /storage/fdunphome/szhang/work/cal_waveFunction/blast-wave-proton-deuteron
+Executable = ana-run.sh
+Arguments    = $(Process)
+Log          = $(Initialdir)/stOut/ana_$(Process).log
+Output       = $(Initialdir)/stOut/ana_$(Process).out
+Error        = $(Initialdir)/stOut/ana_$(Process).err
+Notify_user  = zhangsong@sinap.ac.cn
+Queue 500

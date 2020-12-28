@@ -1,0 +1,61 @@
+#include <fstream>
+#include <iostream>
+#include <ostream>
+#include <sstream>
+#include <cstdlib>
+#include <cmath>
+#include <iomanip>
+#include <string.h>
+#include <math.h>
+#include <TMath.h>
+#include <TMatrixDfwd.h>
+#include <TMatrixDSymfwd.h>
+#include <TMatrixDBase.h>
+#include <TMatrixDSymEigen.h>
+#include <TNtuple.h>
+#include <TH2.h>
+#include <TProfile.h>
+#include <TCanvas.h>
+#include <TFrame.h>
+#include <TROOT.h>
+#include <TSystem.h>
+#include <TRandom3.h>
+#include <TBenchmark.h>
+#include <TInterpreter.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <TComplex.h>
+#include <TROOT.h>
+#include <TFile.h>
+#include <TH3.h>
+#include <TF3.h>
+#include <TStyle.h>
+#include <TCanvas.h>
+#include <TLegend.h>
+#include <TMinuit.h>
+#include <TGraph.h>
+#include <TGraphErrors.h>
+#include <TMultiGraph.h>
+#include "TVector3.h"
+#include "TVector2.h"
+#include "TH1D.h"
+#include "TH2D.h"
+#include "TH3D.h"
+#include "TProfile.h"
+#include "TProfile2D.h"
+#include "TLorentzVector.h"
+#include "TLorentzRotation.h"
+#include "TSystem.h"
+
+using namespace std;
+
+double assoc_laguerre(int n, int m, double x)
+{
+  double res=0;
+  for(int i=0;i<=n;i++)
+  {
+    res+=pow(-1,i)*TMath::Factorial(n+m)/(TMath::Factorial(n-i)*TMath::Factorial(i+m)*TMath::Factorial(i))*pow(x,i);
+  }
+  return res;
+}
+

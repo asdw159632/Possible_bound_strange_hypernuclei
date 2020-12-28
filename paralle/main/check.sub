@@ -1,0 +1,11 @@
+Universe = vanilla
+Notification = Error
+Initialdir = .
+Arguments = $(Process)
+Executable = check.sh
+Output = ./condor/job_check.out
+Error = ./condor/job_check.err
+Log = ./condor/job_check.log
+Notify_user = zhangliang15@lzu.edu.cn
+getenv = true
+queue 

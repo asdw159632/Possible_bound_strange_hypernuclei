@@ -1,0 +1,39 @@
+000 (1673153.036.000) 12/22 17:02:58 Job submitted from host: <172.16.2.141:36601>
+...
+001 (1673153.036.000) 12/22 17:03:01 Job executing on host: <172.16.2.141:56348>
+...
+007 (1673153.036.000) 12/22 17:03:01 Shadow exception!
+	Error from slot7@SERVER64: Failed to execute '/home/zhangliang/Possible_bound_strange_hypernuclei/parallewigner/test.sh' with arguments 36: (errno=13: 'Permission denied')
+	0  -  Run Bytes Sent By Job
+	0  -  Run Bytes Received By Job
+...
+012 (1673153.036.000) 12/22 17:03:02 Job was held.
+	Error from slot7@SERVER64: Failed to execute '/home/zhangliang/Possible_bound_strange_hypernuclei/parallewigner/test.sh' with arguments 36: (errno=13: 'Permission denied')
+	Code 6 Subcode 13
+...
+009 (1673153.036.000) 12/22 17:05:12 Job was aborted by the user.
+	via condor_rm (by user zhangliang)
+...
+000 (1673154.036.000) 12/22 17:10:32 Job submitted from host: <172.16.2.141:36601>
+...
+001 (1673154.036.000) 12/22 17:10:33 Job executing on host: <172.16.2.141:56348>
+...
+006 (1673154.036.000) 12/22 17:10:34 Image size of job updated: 911788
+	0  -  MemoryUsage of job (MB)
+	0  -  ResidentSetSize of job (KB)
+...
+005 (1673154.036.000) 12/22 17:10:34 Job terminated.
+	(1) Normal termination (return value 0)
+		Usr 0 00:00:00, Sys 0 00:00:00  -  Run Remote Usage
+		Usr 0 00:00:00, Sys 0 00:00:00  -  Run Local Usage
+		Usr 0 00:00:00, Sys 0 00:00:00  -  Total Remote Usage
+		Usr 0 00:00:00, Sys 0 00:00:00  -  Total Local Usage
+	0  -  Run Bytes Sent By Job
+	0  -  Run Bytes Received By Job
+	0  -  Total Bytes Sent By Job
+	0  -  Total Bytes Received By Job
+	Partitionable Resources :    Usage  Request Allocated
+	   Cpus                 :                 1         1
+	   Disk (KB)            :        1        1  18596166
+	   Memory (MB)          :        0        1      2676
+...

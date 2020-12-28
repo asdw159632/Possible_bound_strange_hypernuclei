@@ -1,0 +1,3 @@
+Error in <TFile::ReadBuffer>: error reading all requested bytes from file ../pnOmega_qmax3_lmax2_Lmax0_angnum8_nmax5_nstart2_2600.root, got 0 of 300
+Error in <TFile::Init>: ../pnOmega_qmax3_lmax2_Lmax0_angnum8_nmax5_nstart2_2600.root failed to read the file type data.
+file ../pnOmega_qmax3_lmax2_Lmax0_angnum8_nmax5_nstart2_2600.root open error

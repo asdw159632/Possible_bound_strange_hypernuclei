@@ -1,0 +1,320 @@
+int nPoint_p;
+Double_t pT_p[42];
+Double_t dst_p[42];
+Double_t dst_pErr[42];
+
+int nPoint_Omega;
+Double_t pT_Omega[42];
+Double_t dst_Omega[42];
+Double_t dst_OmegaErr[42];
+
+Double_t f_p[42];//f[
+Double_t f_Omega[42];
+
+//Double_t nN;
+Double_t nNMax=2;
+
+void  fcn(Int_t &npar, Double_t *gin, Double_t &func, Double_t *par, Int_t iflag);
+Double_t func_dst(Double_t vpT, Double_t vMass, Double_t vTkin, Double_t vrho0);
+
+Double_t getAmplitudeOld(Int_t vn);
+//Double_t getAmplitude(Int_t vn);
+//void amp(Int_t &npar, Double_t *gin, Double_t &func, Double_t *par, Int_t iflag);
+void readData();
+
+
+
+void fit_protonDst()
+{
+  readData();
+
+  TMinuit *gMinuit = new TMinuit(2);  //initialize TMinuit with a maximum of 2 params
+  gMinuit->SetMaxIterations(5000);
+  gMinuit->SetFCN(fcn);
+
+  Double_t arglist[10];
+
+  Int_t ierflg = 0;
+
+  // set err definition to 1-sigma
+  arglist[0] = 2.;
+  gMinuit->mnexcm("SET ERR", arglist ,1,ierflg);
+
+  // Set starting values and step sizes for parameters
+  static Double_t vstart[] = {0.9, 1.1};
+  static Double_t step[] = {0.001, 0.001};
+
+  // Now ready for minimization step
+  arglist[0] = 1000;
+  arglist[1] = 0.5; // 5.0 @ 1st try
+
+  gMinuit->mnparm(0, "a1", vstart[0], step[0], 0.0,0.0,ierflg);
+  gMinuit->mnparm(1, "a2", vstart[1], step[1], 0.0,0.0,ierflg);
+
+  gMinuit->mnexcm("MIGRAD", arglist ,2,ierflg); 
+  gMinuit->mnexcm("MINOS", arglist ,2,ierflg);
+
+  Double_t Tkin, TkinErr;
+  Double_t rho0, rho0Err;
+  Double_t dum1, dum2;
+  TString *a1 = new TString("a1");
+  TString *a2 = new TString("a2");
+  gMinuit->mnpout(0, *a1, Tkin, TkinErr, dum1, dum2, ierflg);
+  gMinuit->mnpout(1, *a2, rho0, rho0Err, dum1, dum2, ierflg);
+
+  cout<<"Tkin="<<Tkin<<"+-"<<TkinErr<<endl;
+  cout<<"rho0="<<rho0<<"+-"<<rho0Err<<endl;
+
+  double amv[2];
+  for(int i=0; i<nNMax; i++)
+  {
+    amv[i] = getAmplitudeOld(i);
+    cout<<"amv"<<i<<"="<<amv[i]<<endl;
+  }
+
+  Double_t f_pErr[42] = {0};
+  Double_t f_OmegaErr[42] = {0};
+
+
+  for(int i=0; i<nPoint_p; i++) f_p[i] *= amv[0];
+  for(int i=0; i<nPoint_Omega; i++) f_Omega[i] *= amv[1];
+
+  TGraphErrors *gre_p = new TGraphErrors(nPoint_p, pT_p, f_p, f_pErr, f_pErr);
+  TGraphErrors *gre_Omega = new TGraphErrors(nPoint_Omega, pT_Omega, f_Omega, f_OmegaErr, f_OmegaErr);
+
+  gre_p->SetName("gre_p");
+  gre_Omega->SetName("gre_Omega");
+  gre_p->SetNameTitle("gre_p");
+  gre_Omega->SetNameTitle("gre_Omega");
+
+  TFile *fout = new TFile("test-blw.root","RECREATE");
+  gre_p->Write();
+  gre_Omega->Write();
+
+  fout->Write();
+
+  delete fout;
+}
+
+Double_t func_dst(Double_t vpT, Double_t vMass, Double_t vTkin, Double_t vrho0)
+{
+  Double_t mT = sqrt(vpT*vpT + vMass*vMass);
+
+  int Nr=100;
+  double R0 = 19.7;//
+  double dr = R0 / Nr;
+
+  int Netas = 20;
+  double detas = 10.0 / Netas;//-5,5
+
+  int Nphis = 6;
+  double dphis = 2.*TMath::Pi()/Nphis;
+  
+  int Nphip = Nphis;
+  double dphip = dphis;
+
+  double rval, etas, phis, phip;
+
+  double rho, pmu_umu;
+  double etap = 0;
+
+//  cout<<"dV="<<detas * dr * dphis * dphip<<endl;
+
+  double sum=0;
+  for(int ir=0; ir < Nr; ir++)
+  {
+    rval = ( ir + 0.5 ) * dr;
+    rho = vrho0 * rval / R0;
+
+    for(int ietas=0; ietas<Netas; ietas++)
+    {
+	etas = -5. + (ietas +0.5) * detas;
+
+	for(int iphis=0; iphis<Nphis; iphis++)
+	{
+	  phis = (iphis + 0.5) * dphis;
+	  
+	  {
+	    for(int iphip = 0; iphip<Nphip; iphip++)
+	    {
+		phip = (iphip + 0.5) * dphip;
+
+		pmu_umu = mT * cosh(rho) *cosh(etas - etap) - vpT * sinh(rho) * cos(phip - phis);
+
+		sum += mT * cosh(etas - etap) / (exp(pmu_umu/vTkin) + 1.) * detas * rval * dr * dphis * dphip;
+	    }
+	  }
+	}
+    }
+  }
+
+  //cout<<"f_ = "<<sum<<endl;
+  return sum;
+}
+
+void fcn(Int_t &npar, Double_t *gin, Double_t &func, Double_t *par, Int_t iflag)
+{
+  Double_t pT;
+
+  Double_t Tkin = par[0];
+  Double_t rho_0 = par[1];
+
+  Double_t mass_p = 0.938272081;
+  Double_t mass_Omega = 1.67245;
+
+  for(int i=0; i<nPoint_p; i++)
+  {
+    pT = pT_p[i];
+    f_p[i] = func_dst(pT, mass_p, Tkin, rho_0);
+  }
+
+  /*
+  for(int i=0; i<nPoint_Omega; i++)
+  {
+    pT = pT_Omega[i];
+    f_Omega[i] = func_dst(pT, mass_Omega, Tkin, rho_0);
+  }
+  */
+
+  Double_t chisq = 0;
+  Double_t delta;
+  Double_t fAmplitude;
+
+  fAmplitude = getAmplitudeOld(0);//0 for proton
+  for(int i=0; i<nPoint_p; i++)
+  {
+    delta = (dst_p[i] - f_p[i]*fAmplitude) / dst_pErr[i];
+    chisq += delta*delta;
+  }
+
+
+  /*
+  fAmplitude = getAmplitudeOld(1);//1 for Omega
+  for(int i=0; i<nPoint_Omega; i++)
+  {
+    delta = (dst_Omega[i] - f_Omega[i]*fAmplitude) / dst_OmegaErr[i];
+    chisq += delta*delta;
+  }
+*/
+
+  func = chisq;
+}
+
+Double_t getAmplitudeOld(Int_t vn)
+{
+  Double_t SumA = 0.;
+  Double_t SumB = 0.;
+  Double_t Sum1 = 0.;
+  Double_t Sum2 = 0.;
+
+  if(vn == 0)
+  {
+    //proton
+    for(int i=0; i<nPoint_p; i++)
+    {
+	Sum1 += dst_p[i]*f_p[i] / pow(dst_pErr[i],2);
+	Sum2 += pow(f_p[i] / dst_pErr[i], 2);
+	SumA += dst_p[i];
+	SumB += f_p[i];
+    }
+  }
+  else
+  {
+    //Omega
+    for(int i=0; i<nPoint_Omega; i++)
+    {
+	Sum1 += dst_Omega[i]*f_Omega[i] / pow(dst_OmegaErr[i],2);
+	Sum2 += pow(f_Omega[i] / dst_OmegaErr[i], 2);
+	SumA += dst_Omega[i];
+	SumB += f_Omega[i];
+    }
+  }
+  
+  //Double_t kappa = (SumB > 0.) ? SumA/SumB : 0.;
+  Double_t kappa = (Sum2>0.) ? Sum1/Sum2 : 0.;
+
+  return kappa;
+}
+
+void readData()
+{
+  //ALICE_Data/PRC_88_044910_2013_Fig4C_C0005.txt
+  Double_t p_pTC0005[42];
+  Double_t p_pTC0005Err[42]={0};
+  Double_t p_dstC0005[42];
+  Double_t p_dstC0005Err[42];
+
+  char skip[512];
+  int ipoint=0;
+  Double_t xx, yy;
+  Double_t Errs[2];
+  ifstream pinC0005("../ampt-spectra/plot/ALICE_Data/PRC_88_044910_2013_Fig4C_C0005.txt");
+  for(int i=0; i<10; i++) pinC0005.getline(skip,512);
+  cout<<skip<<endl;
+  while(pinC0005.good())
+  {
+    pinC0005>>xx>>skip>>skip>>yy>>Errs[0]>>skip>>Errs[1]>>skip>>skip>>skip>>skip>>skip>>skip;
+    if(!pinC0005.good()) continue;
+
+    p_pTC0005[ipoint] = xx;
+    p_dstC0005[ipoint] = yy;
+    p_dstC0005Err[ipoint] = sqrt(Errs[0]*Errs[0] + Errs[1]*Errs[1]);
+
+    ipoint++;
+  }
+  pinC0005.close();
+
+  ipoint=0;
+  Double_t p_pTC0510[42];
+  Double_t p_pTC0510Err[42]={0};
+  Double_t p_dstC0510[42];
+  Double_t p_dstC0510Err[42];
+
+  ifstream pinC0510("../ampt-spectra/plot/ALICE_Data/PRC_88_044910_2013_Fig4C_C0510.txt");
+  for(int i=0; i<10; i++) pinC0510.getline(skip,512);
+  cout<<skip<<endl;
+  while(pinC0510.good())
+  {
+    pinC0510>>xx>>skip>>skip>>yy>>Errs[0]>>skip>>Errs[1]>>skip>>skip>>skip>>skip>>skip>>skip;
+    if(!pinC0510.good()) continue;
+
+    p_pTC0510[ipoint] = xx;
+    p_dstC0510[ipoint] = yy;
+    p_dstC0510Err[ipoint] = sqrt(Errs[0]*Errs[0] + Errs[1]*Errs[1]);
+
+    ipoint++;
+  }
+  pinC0510.close();
+
+  //int nPoint_p;
+//Double_t pT_p[42];
+//Double_t dst_p[42];
+//Double_t dst_pErr[42];
+
+  nPoint_p=ipoint;
+  for(int i=0; i<ipoint; i++) 
+  {
+    pT_p[i] = p_pTC0510[i];
+    dst_p[i] = p_dstC0005[i] + p_dstC0510[i];
+    dst_pErr[i] = sqrt(p_dstC0005Err[i]*p_dstC0005Err[i] + p_dstC0510Err[i]*p_dstC0510Err[i]);
+  }
+
+  //ALICE_Data/PLB728_216_2014_Figure3_BD_C0010.txt
+  nPoint_Omega=0;
+
+  ifstream OmegainC0010("../ampt-spectra/plot/ALICE_Data/PLB728_216_2014_Figure3_BD_C0010.txt");
+  for(int i=0; i<10; i++) OmegainC0010.getline(skip,512);
+  cout<<skip<<endl;
+  while(OmegainC0010.good())
+  {
+    OmegainC0010>>xx>>skip>>skip>>yy>>Errs[0]>>skip>>Errs[1]>>skip>>skip>>skip>>skip>>skip>>skip;
+    if(!OmegainC0010.good()) continue;
+
+    pT_Omega[nPoint_Omega] = xx;
+    dst_Omega[nPoint_Omega] = yy/(2. * TMath::Pi() * xx);
+    dst_OmegaErr[nPoint_Omega] = sqrt(Errs[0]*Errs[0] + Errs[1]*Errs[1])/(2. * TMath::Pi() * xx);
+
+    nPoint_Omega++;
+  }
+  OmegainC0010.close();
+}

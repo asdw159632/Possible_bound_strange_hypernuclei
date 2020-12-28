@@ -1,0 +1,525 @@
+#include <iostream>
+#include <fstream>
+#include <strstream>
+#include <stdio.h>
+#include <stdlib.h>
+
+#include <TROOT.h>
+#include <TChain.h>
+#include <TFile.h>
+#include <TH3D.h>
+#include <TH2D.h>
+#include <THn.h>
+#include <TProfile.h>
+#include <TProfile2D.h>
+#include <TLorentzVector.h>
+#include <TF3.h>
+#include <TRandom3.h>
+#include <TLorentzRotation.h>
+
+#include <unistd.h>
+#include "omp.h"
+using namespace std;
+
+
+TH2D *rho_density;
+
+Double_t Mass[3] = {0.938272081, 0.939565413, 1.875613};//for p1, p2, cluster
+
+//proton
+double Tkin_proton = 0.1211;//0.1;//0.1211;// GeV
+double rho_0_proton = 1.2;//1.23;//1.215;
+
+//neutron
+double Tkin_neutron = 0.1211;//0.11;// GeV
+double rho_0_neutron = 1.2;//1.07;
+
+double R0 = 19.7;
+double tau0 = 15.5;//
+double delta_tau = 1.;  
+
+//Double_t GA = (2.*2.+1.)/pow(2.,2.)/2.;//for nneutron, ^{5}S_{2}, spin=2, l=0, J=2, GA = (2S_A + 1)*Z!N!/2^A/A!
+
+Double_t GA = 3./8.;//3/8 for deuteron
+
+double V0Scale = 83;//MeV for energy unit
+double hbar = 197.3269788;// MeV fm/c
+double aBorhr;
+double ku;
+
+
+double PI = TMath::Pi();
+double nDst(TLorentzVector vmP, double vTkin, double vrho_0);
+Double_t dN_momentum_BLW(double *x, double *par);
+Double_t dN_coordinates(double *x, double *par);
+Double_t dN_tau(double *x, double *par);
+
+void coal_p1p2(TLorentzVector *vmP_proton, TLorentzVector *vmR_proton, TLorentzVector *vmP_neutron, TLorentzVector *vmR_neutron, int vnum_proton, int vnum_neutron);
+double rho_wigner(TLorentzVector *vcompP, TLorentzVector *vcompR);
+
+TH1D *cluster_pT_Dst = new TH1D("cluster_pT_Dst","cluster_pT_Dst",50,0,5);
+
+Long_t nseed_cmd();
+void executeCMD(const char *cmd, char *result);
+
+int main(int argc, char **argv)
+{
+  Long_t nseedc = nseed_cmd();
+  cout<<"global nseedc="<<nseedc<<endl;
+  //gRandom->SetSeed(time(0));
+  gRandom->SetSeed(nseedc);
+
+  TList *myList = new TList();
+  myList->SetName("myList");
+
+  char *workDir = argv[1];
+  char *jobID = argv[2];
+
+  char inRhoDir[512];
+  sprintf(inRhoDir,"%s/out_phi_rho.root",workDir);
+  TFile fin(inRhoDir);
+  rho_density = (TH2D *) fin.Get("rho");
+
+  //init par
+
+  double m_p1 = Mass[0]*1000;//MeV/c^2
+  double m_p2 = Mass[1]*1000;
+  double mass_mu = m_p1*m_p2/(m_p1+m_p2);
+  aBorhr = sqrt(hbar*hbar/(mass_mu*V0Scale));// fm for length unit
+  ku = hbar/aBorhr;// MeV/c  for momentum unit
+  //init par end
+
+  TH1D *proton_pT_Dst = new TH1D("proton_pT_Dst","proton_pT_Dst",50,0,5);
+  TH1D *neutron_pT_Dst = new TH1D("neutron_pT_Dst","neutron_pT_Dst",50,0,5);
+  myList->Add(proton_pT_Dst);
+  myList->Add(neutron_pT_Dst);
+  myList->Add(cluster_pT_Dst);
+  
+  double dpT = proton_pT_Dst->GetBinWidth(1);
+
+  const int numEvt=20000;
+
+  const int num_proton=35;//_arry=40;//int((gRandom->Rndm()-0.5)*10.)+35;//38;//
+  const int num_neutron=35;//_arry=40;//int((gRandom->Rndm()-0.5)*10.)+38;//
+
+  TLorentzVector mP_proton[num_proton];
+  TLorentzVector mP_neutron[num_neutron];
+  TLorentzVector mR_proton[num_proton];
+  TLorentzVector mR_neutron[num_neutron];
+
+  double pT;
+  double phi_p;
+  double eta_p;
+
+  double tau;
+  double r_rho;
+  double eta_s;
+  double phi_s;
+
+  TF1 *func_pT_proton = new TF1("func_pT_proton",dN_momentum_BLW,0.,5,3);
+  func_pT_proton->SetParameters(Mass[0], Tkin_proton,rho_0_proton);
+
+  TF2 *func_coordinates_proton = new TF2("func_coordinates_proton",dN_coordinates,0,R0, -0.5,0.5, 7);//
+
+  cout<<"func_proton created!!!"<<endl;
+
+  TF1 *func_pT_neutron = new TF1("func_pT_neutron",dN_momentum_BLW,0.,5,3);
+  func_pT_neutron->SetParameters(Mass[1], Tkin_neutron,rho_0_neutron);
+
+  TF2 *func_coordinates_neutron = new TF2("func_coordinates_neutron",dN_coordinates,0,R0, -0.5,0.5, 7);//
+
+  cout<<"func_neutron created!!!"<<endl;
+
+  TF1 *func_tau = new TF1("func_tau",dN_tau,tau0-0.5*delta_tau, tau0+0.5*delta_tau, 2);
+  func_tau->SetParameters(tau0, delta_tau);
+
+  TH1D *x_dst = new TH1D("x_dst","x_dst",30,-5,5);
+  TH1D *y_dst = new TH1D("y_dst","y_dst",30,-5,5);
+  TH1D *z_dst = new TH1D("z_dst","z_dst",30,-5,5);
+
+  TH1D *r_dst = new TH1D("r_dst","r_dst",40,0,20);
+  TH1D *rho_dst = new TH1D("rho_dst","r_dst",40,0,20);
+
+  myList->Add(x_dst);
+  myList->Add(y_dst);
+  myList->Add(z_dst);
+  myList->Add(r_dst);
+  myList->Add(rho_dst);
+
+  TH1F *h1_event = new TH1F("h1_event","h1_event",1,0,1);
+  myList->Add(h1_event);
+
+  double rMag, mT;
+
+  for(int ievt=0;ievt<numEvt; ievt++)
+  {
+    h1_event->Fill(0.);
+
+    //proton
+    for(int ipart=0; ipart<num_proton; ipart++)
+    {
+	pT = func_pT_proton->GetRandom();
+
+	proton_pT_Dst->Fill(pT, 1./(2. * PI * pT * dpT));
+
+	phi_p = gRandom->Rndm() * 2. * PI;
+	eta_p = gRandom->Rndm() - 0.5;
+
+	phi_s = gRandom->Rndm() * 2. * PI;
+	func_coordinates_proton->SetParameters(Mass[0], Tkin_proton, rho_0_proton,  pT, eta_p, phi_p, phi_s);
+
+	func_coordinates_proton->GetRandom2(r_rho, eta_s);
+	tau = func_tau->GetRandom();
+
+	x_dst->Fill(r_rho*cos(phi_s));
+	y_dst->Fill(r_rho*sin(phi_s));
+	z_dst->Fill(tau*sinh(eta_s));
+
+	rMag = sqrt(r_rho*r_rho + pow(tau*sinh(eta_s),2));
+	if(rMag>1e-7) r_dst->Fill(rMag, 1/rMag/rMag);
+
+	rho_dst->Fill(r_rho, 1./r_rho);
+
+	mT = sqrt(pT*pT+Mass[0]*Mass[0]);
+	mP_proton[ipart].SetPxPyPzE(pT*cos(phi_p), pT*sin(phi_p), mT*sinh(eta_p), mT*cosh(eta_p));
+	mR_proton[ipart].SetXYZT(r_rho*cos(phi_s), r_rho*sin(phi_s), tau*sinh(eta_s), tau*cosh(eta_s));
+    }
+
+    //neutron
+    for(int ipart=0; ipart<num_neutron; ipart++)
+    {
+	pT = func_pT_neutron->GetRandom();
+
+	neutron_pT_Dst->Fill(pT, 1./(2. * PI * pT * dpT));
+
+	phi_p = gRandom->Rndm() * 2. * PI;
+	eta_p = gRandom->Rndm() - 0.5;
+
+	phi_s = gRandom->Rndm() * 2. * PI;
+	func_coordinates_neutron->SetParameters(Mass[1], Tkin_neutron, rho_0_neutron,  pT, eta_p, phi_p, phi_s);
+
+	func_coordinates_neutron->GetRandom2(r_rho, eta_s);
+	tau = func_tau->GetRandom();
+
+	mT = sqrt(pT*pT+Mass[1]*Mass[1]);
+	mP_neutron[ipart].SetPxPyPzE(pT*cos(phi_p), pT*sin(phi_p), mT*sinh(eta_p), mT*cosh(eta_p));
+	mR_neutron[ipart].SetXYZT(r_rho*cos(phi_s), r_rho*sin(phi_s), tau*sinh(eta_s), tau*cosh(eta_s));
+    }
+
+    coal_p1p2(mP_proton, mR_proton, mP_neutron, mR_neutron, num_proton, num_neutron);
+
+    cout<<ievt+1<<" events finished"<<endl;
+  }
+
+  char outName[512];
+  sprintf(outName,"%s/results/result-%s.root",workDir,jobID);
+
+  TFile *fout = new TFile(outName,"RECREATE");
+
+  myList->Write();
+  fout->Write();
+
+  delete fout;
+}
+
+Double_t dN_momentum_BLW(double *x, double *par)
+{
+  double vpT = x[0];
+
+  double mass = par[0];
+  double Tkin = par[1];
+  double rho_0 = par[2];
+
+  //double mass_p = 1.67245;
+
+  TLorentzVector mP;
+
+  //double pT, phi, eta;
+  double phi, eta;
+
+  int Nphi_p=24;//24
+  double dphi = 2.*PI/Nphi_p;
+  
+  //set eta=0;
+  eta=0;
+
+  double sumN=0;
+  for(int iphi = 0; iphi<Nphi_p; iphi++)
+  {
+    phi = dphi * iphi;
+
+    mP.SetPtEtaPhiM(vpT, eta, phi, mass);
+    sumN += nDst(mP, Tkin, rho_0) * dphi;
+  }
+
+  return sumN * vpT;
+}
+
+double nDst(TLorentzVector vmP, double vTkin, double vrho_0)
+{
+  double Tkin = vTkin;
+  double rho_0 = vrho_0;
+
+  double mT = vmP.Mt();
+  double pT = vmP.Pt();
+  double phi_p = vmP.Phi();
+  double eta_p = vmP.Rapidity();
+
+  //int it=0;//tau
+  int ies=0;//eta_s
+  int ir=0;//r
+  int iphis=0;//phi_s
+
+  //int Ntau = 10;//50
+  //double dtau = 6.*delta_tau / Ntau;//from -5sigma to 5sigma, here delta_tau is sigma of proper time distribution
+  
+  int Neta_s = 20;//50
+  double deta_s = 10.0 / Neta_s;//from -5 to 5
+  
+  int Nr = 50;//100
+  double dr = R0 / Nr;
+
+  int Nphi_s=24;//24
+  double dphi_s = 2.*PI / Nphi_s;
+
+  double eta_s, r, phi_s;
+  
+  double rho;
+  double pmu_umu;
+//  double J_tau;
+
+  double sum = 0;
+  //for(it=0; it<Ntau; it++)
+  //{
+    //tau = tau0 - 3.*delta_tau + dtau * it;
+
+    for(ies=0; ies<Neta_s; ies++)
+    {
+	eta_s = -5. + deta_s * ies;
+
+	for(ir=0; ir<Nr; ir++)
+	{
+	  r = 0. + dr *ir;
+
+	  for(iphis=0; iphis<Nphi_s; iphis++)
+	  {
+	    phi_s = 0. + dphi_s * iphis;
+
+	    rho = rho_0 * r / R0;
+	    pmu_umu = mT * cosh(rho) *cosh(eta_s - eta_p) - pT * sinh(rho) * cos(phi_p - phi_s);
+//	    J_tau = 1. / (delta_tau * sqrt(2. * PI)) * exp( - pow( (tau - tau0) / delta_tau, 2) / 2.);
+	    //sum += mT * cosh(eta_s - eta_p) / (exp(pmu_umu/Tkin) + 1.) * J_tau * tau * dtau * deta_s * r * dr * dphi_s;
+	    sum += mT * cosh(eta_s - eta_p) / (exp(pmu_umu/Tkin) + 1.) * deta_s * r * dr * dphi_s;
+	  }
+	}
+    }
+  //}
+
+  return sum;
+}
+
+Double_t dN_coordinates(double *x, double *par)
+{
+  double r = x[0];
+  double eta_s = x[1];
+
+  double mass  = par[0];
+  double Tkin  = par[1];
+  double rho_0 = par[2];
+  double pT    = par[3];
+  double eta_p = par[4];
+  double phi_p = par[5];
+  double phi_s = par[6];
+
+  double mT = sqrt(pT*pT + mass * mass);
+
+  double rho = rho_0 * r / R0;
+  double pmu_umu = mT * cosh(rho) *cosh(eta_s - eta_p) - pT * sinh(rho) * cos(phi_p - phi_s);
+
+  double theVal = mT * cosh(eta_s - eta_p) / (exp(pmu_umu/Tkin) + 1.) * r;
+
+  return theVal;
+}
+
+Double_t dN_tau(double *x, double *par)
+{
+  double tau = x[0];
+
+  double vtau0 = par[0];
+  double vdelta_tau = par[1];
+
+  double PI = TMath::Pi();
+
+  double J_tau = 1. / (vdelta_tau * sqrt(2. * PI)) * exp( - pow( (tau - vtau0) / vdelta_tau, 2) / 2.);
+  double theVal = J_tau * tau;
+
+  return theVal;
+}
+
+
+void coal_p1p2(TLorentzVector *vmP_proton, TLorentzVector *vmR_proton, TLorentzVector *vmP_neutron, TLorentzVector *vmR_neutron, int vnum_proton, int vnum_neutron)
+{
+  double rho_W=0;
+
+  TLorentzVector mP[2];
+  TLorentzVector mR[2];
+  TLorentzVector mP_p1p2;
+  
+  double dpT = cluster_pT_Dst->GetBinWidth(1);
+  for(int i=0; i<vnum_proton; i++)
+  {
+    mP[0] = vmP_proton[i];
+    mR[0] = vmR_proton[i];
+    for(int j=0; j<vnum_neutron; j++)
+    {
+	mP[1] = vmP_neutron[j];
+	mR[1] = vmR_neutron[j];
+
+	mP_p1p2.SetVectM((mP[0] + mP[1]).Vect(), Mass[2]);
+	if(mP_p1p2.Pt()<1e-7) continue;
+	//if(fabs(mP_p1p2.Rapidity())>0.5) continue;
+
+	rho_W = rho_wigner(mP, mR);
+	//if(rho_W<1e-20) continue;
+
+	cluster_pT_Dst->Fill(mP_p1p2.Pt(), 1./(2.*PI*mP_p1p2.Pt()*dpT) * rho_W * GA);
+    }
+  }
+}
+
+double rho_wigner(TLorentzVector *vcompP, TLorentzVector *vcompR)
+{
+  double ETotalLab; //total energy of cluster
+  TVector3 Pcmtolab; //3d-momenta of cluster
+  TVector3 betalabtocm; //velocity of lab relative to center of cluster
+  //TLorentzRotation LRltoc;
+
+  TLorentzVector pcpt1Rcm; //coordinates of particle in center of mass frame
+  TLorentzVector pcpt2Rcm;
+
+  double pcpt1Timecm;//time of particle in center of mass frame
+  double pcpt2Timecm;
+
+  TVector3 pcpt1R3cm;//3d-coordinates of particle in center of mass frame
+  TVector3 pcpt2R3cm;
+
+  TLorentzVector pcpt1Pcm;//momenta of particle in center of mass frame
+  TLorentzVector pcpt2Pcm;
+
+  TVector3 pcpt1P3cm;//3d-momenta of particle in center of mass frame
+  TVector3 pcpt2P3cm;
+
+  TVector3 CMR;//3d-coordinates of center of mass frame
+  TVector3 rho;//3d-relative-coordinates
+  TVector3 CMK;//3d-relative-momenta
+  TVector3 krho;
+
+  double rhoWH=0.; //possibility
+
+  TLorentzVector current_mP; //momenta of cluster
+
+  ETotalLab = vcompP[0].Energy() + vcompP[1].Energy();
+  //      Pcmtolab = pcpt1[i1].particleP.Vect() + pcpt2[i2].particleP.Vect();
+
+  //here skip some cluster
+
+  current_mP = vcompP[0]+vcompP[1];
+  Pcmtolab = current_mP.Vect();
+
+  betalabtocm = -1./ETotalLab*Pcmtolab;
+  TLorentzRotation LRltoc(betalabtocm);
+
+  pcpt1Rcm = LRltoc*vcompR[0];//boost R(4d) from lb to cm frame
+  pcpt2Rcm = LRltoc*vcompR[1];
+
+  pcpt1Timecm = pcpt1Rcm.T();
+  pcpt2Timecm = pcpt2Rcm.T();
+
+  //if(fabs(pcpt1Timecm-pcpt2Timecm)>1.0) return rhoWH;
+
+  pcpt1R3cm = pcpt1Rcm.Vect();//extract R(3d) from R(4d)
+  pcpt2R3cm = pcpt2Rcm.Vect();
+
+  pcpt1Pcm = LRltoc*vcompP[0];//boost P(4d) from lb to cm frame
+  pcpt2Pcm = LRltoc*vcompP[1];
+
+  pcpt1P3cm = pcpt1Pcm.Vect();//extract P(3d) from P(4d)
+  pcpt2P3cm = pcpt2Pcm.Vect();
+
+
+  //CMR = 1./2.*(pcpt1R3cm + pcpt2R3cm);
+  //CMK = pcpt1P3cm + pcpt2P3cm;
+
+  double m1 = vcompP[0].M();
+  double m2 = vcompP[1].M();
+  CMR = 1./(m1+m2) * (m1*pcpt1R3cm + m2*pcpt2R3cm);
+  CMK = pcpt1P3cm + pcpt2P3cm;
+
+  //rho = pcpt1R3cm-pcpt2R3cm;
+  //krho = 1./2.*(pcpt1P3cm-pcpt2P3cm);
+
+  rho = pcpt1R3cm - pcpt2R3cm;
+  krho = 1./(m1+m2) * (m2*pcpt1P3cm - m1*pcpt2P3cm);
+
+  //convert to unit used in phi-wave function and rho-densoty
+
+  double rho_mag = rho.Mag()/aBorhr;
+
+//  cout<<"rho_mag="<<rho_mag<<endl;
+
+  rho_mag = log(rho_mag);
+  double krho_mag = krho.Mag()*1000/ku;// GeV->MeV
+  krho_mag = log(krho_mag);
+
+  int rBin = rho_density->GetXaxis()->FindBin(rho_mag);
+  int kBin = rho_density->GetYaxis()->FindBin(krho_mag);
+
+  rhoWH = rho_density->GetBinContent(rBin, kBin); 
+
+  if(std::isnan(rhoWH)||std::isinf(rhoWH)) return 0;
+
+  return rhoWH;
+}
+
+Long_t nseed_cmd()
+{
+  //cout<<time(0)+seed()<<endl;
+//  char thecmd[64]={"date +%S"};//MacOs
+  char thecmd[64]={"date +%N"};//Linux
+  char thetns[64]={""};
+  executeCMD(thecmd,thetns);
+
+  //    cout<<"thetns is "<<thetns<<endl;
+
+  Long_t thens = Long_t(atof(thetns));//system("date +%N");
+  Long_t ts = time(0);
+
+  //    cout<<"thens="<<thens<<endl;
+  //    cout<<"the ts="<<ts<<endl;
+  //    cout<<"nseed="<<ts+thens<<endl;
+
+  return ts+thens;
+  //    sprintf(thetns,"%s","");
+}
+void executeCMD(const char *cmd, char *result)
+{
+  char buf_ps[1024];
+  char ps[1024]={0};
+  FILE *ptr;
+  strcpy(ps, cmd);
+  if((ptr=popen(ps, "r"))!=NULL)
+  {
+    while(fgets(buf_ps, 1024, ptr)!=NULL)
+    {
+      strcat(result, buf_ps);
+      if(strlen(result)>1024)
+        break;
+    }
+    pclose(ptr);
+    ptr = NULL;
+  }
+  else
+  {
+    printf("popen %s error\n", ps);
+  }
+}

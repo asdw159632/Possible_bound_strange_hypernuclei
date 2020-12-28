@@ -1,0 +1,37 @@
+Error in <TFile::ReadBuffer>: error reading all requested bytes from file ../pnOmega_qmax3_lmax2_Lmax0_angnum8_nmax5_nstart2_2600.root, got 0 of 341
+Error in <TKey::ReadFile>: Failed to read data.
+Error in <TFile::ReadBuffer>: error reading all requested bytes from file ../pnOmega_qmax3_lmax2_Lmax0_angnum8_nmax5_nstart2_2600.root, got 0 of 617
+Error in <TKey::ReadFile>: Failed to read data.
+Error in <TFile::ReadBuffer>: error reading all requested bytes from file ../pnOmega_qmax3_lmax2_Lmax0_angnum8_nmax5_nstart2_2600.root, got 0 of 367
+Error in <TKey::ReadFile>: Failed to read data.
+
+ *** Break *** segmentation violation
+
+
+
+===========================================================
+There was a crash.
+This is the entire stack trace of all threads:
+===========================================================
+#0  0x0000003f3a2ac89e in waitpid () from /lib64/libc.so.6
+#1  0x0000003f3a23e4e9 in do_system () from /lib64/libc.so.6
+#2  0x00002b1da0372888 in TUnixSystem::StackTrace() () from /home/zhangliang/root/source-root-5-34/lib/libCore.so
+#3  0x00002b1da0371703 in TUnixSystem::DispatchSignals(ESignals) () from /home/zhangliang/root/source-root-5-34/lib/libCore.so
+#4  <signal handler called>
+#5  0x000000000040443e in readinfo(TFile*, char*) ()
+#6  0x00000000004045ae in main ()
+===========================================================
+
+
+The lines below might hint at the cause of the crash.
+If they do not help you then please submit a bug report at
+http://root.cern.ch/bugs. Please post the ENTIRE stack trace
+from above as an attachment in addition to anything else
+that might help us fixing this issue.
+===========================================================
+#5  0x000000000040443e in readinfo(TFile*, char*) ()
+#6  0x00000000004045ae in main ()
+===========================================================
+
+
+/home/zhangliang/Possible_bound_strange_hypernuclei/parallewigner/exec.sh: line 4: 10222 Segmentation fault      ./analysis pnOmega_qmax3_lmax2_Lmax0_angnum8_nmax5_nstart2_2600 $1

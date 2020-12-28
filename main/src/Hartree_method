@@ -1,0 +1,346 @@
+#include <head.h>
+
+///////////////////////////////////////////////////////////////
+//
+//Hartree method solving three-body nuclear wave function
+//
+///////////////////////////////////////////////////////////////
+//Written by Zhang Liang, 2020-09
+//The unit is all in MeV
+///////////////////////////////////////////////////////////////
+
+///////////////////////////////////////
+//Initialization
+///////////////////////////////////////
+
+//Initialization of test wave function
+double orthbasis(double r, int n, int l = 0)
+{
+	double result_basis=(Power(2,7 + 5*l)*Power(5,1.5 + l)*r*Power(r/n,l)*Sqrt(Factorial(-1 - l + n)/(Power(n,4)*Factorial(l + n)))*
+		assoc_laguerre(-1 - l + n,1 + 2*l,(160*r)/n))/Power(E,(80*r)/n);
+		/*The bases are given by hydrogen, it can be write as |nl> in the annotation.
+	      orthbasis[r, n, l] = <r|nl> *r is the reduced radial wave function.
+	      Attention : the bases with different l are not orthogonal.
+          And the c is the variational parameter  For simplification, we set l = 0.*/
+	return result_basis;
+}
+
+
+	double Pi=TMath::Pi();
+    double Y=1/Sqrt(1/4 Pi);/*Spherical harmonic function: sph_legendre(l, m, theta)*exp(i*m*phi). 
+    							For S-wave, l = m = 0, Y = 1/Sqrt(4 Pi).*/
+    int nmax=5;//nmax represent the number of used orthogonal bases.
+
+//Initialization of test wave function done
+
+/////////////////////////
+
+//Initialization of potential
+	//The NN potential parameter 
+	double C1_10 = -513.968*5.06/1000;//C1_10, the 10 represent the isospin-spin,the C1_01, VNN_10, VNN_01 is the same
+	double C1_01 = -626.885*5.06/1000;
+	double mu1 = 1.55*1000/5.06;
+	double C2 = 1438.72*5.06/1000;
+	double mu2 = 3.11*1000/5.06;
+
+	//The NOmega potential parameter
+	double mpi = 146;//use the effective mass as HAL QCD result
+	double b[] = {-313.0, 81.7*Power(1000/5.06,2), -252*Power(5.06/1000,2), 0.85*Power(1000/5.06,2)};//choose the parameters of t/a=12
+
+	//The Coulomb potential perameter
+	double alpha = 1/137.036;
+
+	//choice a system, choice H-3, He-3 or NNOmega
+	#define H-3 
+	//#define He-3 
+	//#define pnOmega 
+	//#define nnOmega //This and the following is not added yet
+	//#define pOmegaOmega
+	//#define nOmegaOmega
+
+double VNN_10(double r)//The potential between NN, with (I,S)=(1,0)
+{
+	double result_VNN_10 = C1_10 exp(-mu1 r)/r + C2 exp(-mu2 r)/r;
+	return result_VNN_10;
+}
+
+double VNN_01(double r)//The potential between NN, with (I,S)=(0,1)
+{
+	double result_VNN_01 = C1_01 exp(-mu1 r)/r + C2 exp(-mu2 r)/r;
+	return result_VNN_01;
+}
+
+double VNOmega(double r)//The potential between NOmega
+{
+	double result_VNOme = b[0] exp(-b[1] r*r) + b[2] (1 - exp(-b[3] r*r))*Power(exp(-mpi r)/r,2);
+	return result_VNOme;
+}
+
+double Vc(double r)
+{
+	double result_Vc=-alpha/r;
+	return result_Vc;
+}
+
+//Vij represent the pential between particle i and particle j.
+#ifdef H-3 //H-3, 1 for p, 2 for n, 3 for n
+	double m[] = {938.27, 939.57, 939.57};
+	char nuclear[]="H-3";
+	double Par[3][5]={
+		{27.5223, 2.32935*5.06/1000, 0.456977*5.06/1000, 186.45, 0.504185*5.06/1000},
+		{27.5223, 2.32935*5.06/1000, 0.456977*5.06/1000, 186.45, 0.504185*5.06/1000},
+		{27.5223, 2.32935*5.06/1000, 0.456977*5.06/1000, 186.45, 0.504185*5.06/1000}};
+
+double V12(double r)
+{
+	double result_V12=VNN_01(r);
+	return result_V12;
+}
+double V23(double r)
+{
+	double result_V23=VNN_10(r);
+	return result_V23;
+}
+double V13(double r)
+{
+	double result_V13=VNN_01(r);
+	return result_V13;
+}
+#endif
+
+#ifdef He-3 //He-3, 1 for p, 2 for p, 3 for n
+void init_nuclear_type_and_nucleon_mass()
+{
+	double m[] = {938.27, 938.27, 939.57};
+	char nuclear[]="He-3";
+}
+double V12(double r)
+{
+	double result_V12=VNN_10(r)-Vc(r);//-Vc for the repulsive force between pp
+	return result_V12;
+}
+double V23(double r)
+{
+	double result_V23=VNN_01(r);
+	return result_V23;
+}
+double V13(double r)
+{
+	double result_V13=VNN_01(r);
+	return result_V13;
+}
+#endif
+
+#ifdef pnOmega //NNOmega, 1 for p, 2 for n, 3 for Omega
+void init_nuclear_type_and_nucleon_mass()
+{
+	double m[] = {938.27, 939.57, 1672.45};
+	char nuclear[]="pnOmega";
+}
+double V12(double r)
+{
+	double result_V12=VNN_01(r);
+	return result_V12;
+}
+double V23(double r)
+{
+	double result_V23=VNOmega(r);
+	return result_V23;
+}
+double V13(double r)
+{
+	double result_V13=VNOmega(r)+Vc(r);//+Vc for the attractive force between pOmega
+	return result_V13;
+}
+#endif
+
+//Initialization of potential done
+
+/////////////////////////
+
+//Initialization of position
+double rij(double ri, double rj, double phij)
+  /*Set particle i in z-axis, thetai=0, phii=0 and the plane of three particles on xy-plane(theta is all Pi()/2), 
+then rij is dependent on ri, rj, phij.*/
+{
+	TVector3 vec_Ri,vec_Rj;
+	vec_Ri.SetMagThetaPhi(ri,Pi/2,0);
+	vec_Rj.SetMagThetaPhi(rj,Pi/2,phij);
+	double dis_rij=(vec_Ri-vec_Rj).Mag;
+	return dis_rij;
+}
+
+TVector3 Rk(int ij,double ri, double rj, double phij)
+  /*After set vec_Ri and vec_Rj in CMS frame, the vec_Rk is settled by the vec_Ri and vec_Rj.
+ij is used to confirm two particles' id and their position to settle the third particle' s position*/
+{
+	TVector3 vec_Ri,vec_Rj,vec_Rk;
+	vec_Ri.SetMagThetaPhi(ri,Pi/2,0);
+	vec_Rj.SetMagThetaPhi(rj,Pi/2,phij);
+	double mi,mj;
+	if(ij==12){
+		mi=m[1];
+		mj=m[2];
+	}else if(ij==21){
+		mi=m[2];
+		mj=m[1];
+	}else if(ij==13){
+		mi=m[1];
+		mj=m[3];
+	}else if(ij==31){
+		mi=m[3];
+		mj=m[1];
+	}else if(ij==23){
+		mi=m[2];
+		mj=m[3];
+	}else if(ij==32){
+		mi=m[3];
+		mj=m[2];
+	}else{
+		printf("Error, not defined ij\n");
+		abort();
+	}
+	vec_Rk=-mi*vec_Ri-mj*vec_Rj;
+	return vec_Rk;
+}
+
+double rik(int ij,double ri, double rj, double phij)
+{
+	TVector3 vec_Ri,vec_Rk;
+	vec_Ri.SetMagThetaPhi(ri,Pi/2,0);
+	vec_Rk=Rk(ij,ri,rj,phij);
+	double dis_rik=(Ri-Rk).Mag;
+	return dis_rik;
+}
+
+//Initialization of position done
+
+/////////////////////////
+
+//Initialization of variation
+	double H[3][nmax][nmax];
+	memset(H,0,sizeof(H));
+	  //H[i] is the matrix form of Hamiltonian of particle i
+	double c0=100;//c0 is the begin variational parameter of every variational iteration loop
+	double c00=c0/10;//A parameter which determine the precision/step-size of every variational iteration loop
+	int Ncmax=6;/*The span of one variational iteration loop is given by Ncmax*c00. 
+				  It means, in this loop, c varies from c0-c00/10^loop*(Ncmax/2) to c0+c00/10^loop*(Ncmax/2)*/
+	int Nprecisionloop=3;/*The Nprecision determine the final precision of c. 
+	                       The final precision of c is given by c00/(10^Nprecisionloop) in every loop.*/
+	double Hmin[3][Ncmax][4];
+	memset(Hmin,0,sizeof(Hmin));
+	  /*An array record the value of miniest eigenvalue in this precisionloop and its eigenvector and c. 
+	    The order of data is: eigenvalue, eigenvector, c, Nc(record the date position in Hmin[i])*/
+
+//Initialization of variation done
+
+
+//Initialization of solving the non-linear equations
+	double A[3][nmax]={0};
+	memset(A,0,sizeof(A));
+      //A[i][n] represent the <psi_i|n0>, |psi_i> is the approximate solution. i represent the different particle.
+    double Eb[3]={0};//Eb[i] store the base-state energy of particle i.
+    double c_i[3]={0};//To store the variation parameter c_i for particle i.
+    double Ans[3][4];
+    memset(Ans,0,sizeof(Ans));
+      //To store the best parameters of the original solution of each particle.
+
+///////////////////////////////////////
+//Initialization done
+///////////////////////////////////////
+
+//////////////////////////////////////////////////
+//////////////////////////////////////////////////
+
+//test wave function phi_i(gen)
+double phi_1(double r)
+{
+	double res_phi_1=0;
+	for(int n=0; n<nmax; n++)
+	{
+		res_phi_1+=A1[n]*orthbasis(r,n);
+	}
+	return res_phi_1;
+}
+double phi_2(double r)
+{
+	double res_phi_2=0;
+	for(int n=0; n<nmax; n++)
+	{
+		res_phi_2+=A2[n]*orthbasis(r,n);
+	}
+	return res_phi_2;
+}
+double phi_3(double r)
+{
+	double res_phi_3=0;
+	for(int n=0; n<nmax; n++)
+	{
+		res_phi_3+=A3[n]*orthbasis(r,n);
+	}
+	return res_phi_3;(phi_2(r)*phi_2(r))
+}
+
+//The original average potential U(0)_i.
+double U(int i, double r)
+{
+	double res_U=-Par[i][1]/(1+exp((r-Par[i][2])/Par[i][3]))+Par[i][4]*exp(-r*r/(Par[i][5]*Par[i][5]));
+	return res_U;
+}
+
+//The integrand of H[i][n][m]
+double integrand_H(double r, int par*)
+{
+	int i=par[0];//particle id;
+	int base_n=par[1];//orthbasis main number
+	int base_m=par[2];//orthbasis main number
+
+
+	TF1 *fun_orthbasis=new TF1("fun_orthbasis",orthbasis,0,10);
+	fun_orthbasis->SetParameter(0,base_m);
+	double result_integrand_H=orthbasis(r,base_n)*(-fun_orthbasis->Derivative2(r)/(2*m[i])+U(i,r)*orthbasis(r,base_m));
+	return result_integrand_H;
+}
+
+void main()
+{
+	///////////////////////////////////////////////////////////////
+	//
+	//Hartree method solving three-body nuclear wave function
+	//
+	///////////////////////////////////////////////////////////////
+
+	///////////////////////////////////////
+	//Variation
+	///////////////////////////////////////
+
+	//Variation to solve Schrodinger equation and get the parameter c_i and origin solution A(0)_i
+
+	double c;//Variation parameter
+	int H_row=0;//Point to the row of H
+	int H_col=0;//Point to the column of H
+	for(int precisionloop=0; precisionloop<=Nprecisionloop; precisionloop++)//The precision, in one loop, is c00/10^precisionloop
+	{
+		for(int Nc=0; Nc<Ncmax; Nc++)//variation of c in this precisionloop
+		{
+			c = c0 + c00/Power(10,precisionloop)*(Nc - Ncmax/2);//Giving c value in this precision
+			if(c >= 0)
+			{
+				for(int i=0; i<3; i++)
+				{
+					Hmin[i][Nc][3]=c;//Record the c value in this precisionloop
+					Hmin[i][Nc][4]=Nc;//Record the Nc as the position in Hmin[i] in this precisionloop
+					for(int base_n=0; base_n<nmax; base_n++)
+					{
+						for(int base_m=0; base_m<nmax; base_m++)
+						{
+							TF1 *fun_integrand_H=new TF1("fun_integrand_H",integrand_H,0,10);
+							fun_integrand_H->SetParameters(i,base_n,base_m);
+							H[i][H_row][H_col]=fun_integrand_H->Integral(0,10);
+						}
+					}
+				}
+			}//This condition is c must lager than 0
+		}//Nc loop. This loop is same as variation of c, but find optimal solution by scan in every precision.
+	}//Precisionloop is used to give c a precision, the precision of c is c00/(10^Nprecisionloop) in every loop.
+}

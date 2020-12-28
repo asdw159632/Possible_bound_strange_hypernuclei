@@ -1,0 +1,23 @@
+000 (7995.345.000) 06/06 17:40:55 Job submitted from host: <172.16.11.200:9618?addrs=172.16.11.200-9618&noUDP&sock=15237_350b_4>
+...
+001 (7995.345.000) 06/06 19:36:47 Job executing on host: <172.16.11.232:9618?addrs=172.16.11.232-9618&alias=pc-farm2&noUDP&sock=startd_5675_7874_4>
+...
+006 (7995.345.000) 06/06 19:36:56 Image size of job updated: 49928
+	49  -  MemoryUsage of job (MB)
+	49928  -  ResidentSetSize of job (KB)
+...
+005 (7995.345.000) 06/06 21:18:08 Job terminated.
+	(1) Normal termination (return value 0)
+		Usr 0 01:40:31, Sys 0 00:00:02  -  Run Remote Usage
+		Usr 0 00:00:00, Sys 0 00:00:00  -  Run Local Usage
+		Usr 0 01:40:31, Sys 0 00:00:02  -  Total Remote Usage
+		Usr 0 00:00:00, Sys 0 00:00:00  -  Total Local Usage
+	0  -  Run Bytes Sent By Job
+	0  -  Run Bytes Received By Job
+	0  -  Total Bytes Sent By Job
+	0  -  Total Bytes Received By Job
+	Partitionable Resources :    Usage  Request Allocated 
+	   Cpus                 :     0.96        1         1 
+	   Disk (KB)            :     1           1    235335 
+	   Memory (MB)          :    49           1      1005 
+...
