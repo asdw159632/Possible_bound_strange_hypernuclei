@@ -73,7 +73,7 @@ int main(int argc, char **argv)
   
   double dpT = p1_pT_Dst->GetBinWidth(1);
 
-  const int numEvt=200000;
+  const int numEvt=10000;
 
   TLorentzVector mP_p1[num_p1];
   TLorentzVector mP_p2[num_p2];
@@ -492,25 +492,32 @@ double rho_wigner(TLorentzVector *vcompP, TLorentzVector *vcompR)
 
 	TVector3 rho1=-sqrt( m2*m3/((m2+m3)*Q_in) )*(pcpt2R3cm - pcpt3R3cm);
 	TVector3 rho2=-sqrt( (m2+m3)*m1/(M_in*Q_in) )*pcpt1R3cm + sqrt( m1/(M_in*Q_in*(m2+m3)) )*(m2*pcpt2R3cm + m3*pcpt3R3cm);
-	double rho_mag=sqrt(rho1.Mag2()+rho2.Mag2())*1000./fmmev;//sqrt(rho1^2+rho2^2); fm
-	rho_mag/=aBorhr;
-	rho_mag=log(rho_mag);
+	double rho_mag=sqrt(rho1.Mag2()+rho2.Mag2());//sqrt(rho1^2+rho2^2); fm
+  //cout<<"rho1: "<<rho1.Mag()<<" rho2:"<<rho2.Mag()<<endl;
 
 //  cout<<"rho_mag="<<rho_mag<<endl;
 
-	TVector3 krho1=-sqrt( Q_in/(m2+m3) )*( m3/m2*pcpt2P3cm - m2/m3*pcpt3P3cm);
+	TVector3 krho1=-sqrt( Q_in/(m2+m3) )*( sqrt(m3/m2)*pcpt2P3cm - sqrt(m2/m3)*pcpt3P3cm);
 	TVector3 krho2=-sqrt( (m2+m3)*Q_in/(M_in*m1) )*pcpt1P3cm + sqrt( m1*Q_in/(M_in*(m2+m3)) )*(pcpt2P3cm + pcpt3P3cm);
   double krho_mag = sqrt(krho1.Mag2()+krho2.Mag2());//sqrt(krho1^2+krho2^2); GeV
-	krho_mag=krho_mag*1000/ku;//GeV->MeV, then scale it
-	krho_mag=log(krho_mag);
+  //cout<<"krho1: "<<krho1.Mag()<<" krho2:"<<krho2.Mag()<<endl;
 
 	double theta=acos(( rho1.Dot(krho1)+rho2.Dot(krho2) )/(rho_mag*krho_mag));
+	//cout<<"theta:"<<theta<<" k:"<<krho_mag<<" rho:"<<rho_mag<<" rhoWH:";
+
+//scale
+	rho_mag/=aBorhr;
+	rho_mag=log(rho_mag);
+
+	krho_mag=krho_mag*1000/ku;//GeV->MeV, then scale it
+	krho_mag=log(krho_mag);
 
   int rBin = rho_density->GetXaxis()->FindBin(rho_mag);
   int kBin = rho_density->GetYaxis()->FindBin(krho_mag);
 	int thetaBin = rho_density->GetZaxis()->FindBin(theta);
 
   rhoWH = rho_density->GetBinContent(rBin, kBin, thetaBin); 
+	//cout<<rhoWH<<endl;
 
   if(std::isnan(rhoWH)||std::isinf(rhoWH)) return 0;
 
