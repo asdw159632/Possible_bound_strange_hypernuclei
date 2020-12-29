@@ -64,11 +64,16 @@ int main(int argc, char **argv)
   //init par end
 
   TH1D *p1_pT_Dst = new TH1D(ti_p1_pT_Dst,ti_p1_pT_Dst,50,0,10);
-  TH1D *p2_pT_Dst = new TH1D(ti_p2_pT_Dst,ti_p2_pT_Dst,50,0,10);
-  TH1D *p3_pT_Dst = new TH1D(ti_p3_pT_Dst,ti_p3_pT_Dst,50,0,10);
   myList->Add(p1_pT_Dst);
+
+  TH1D *p2_pT_Dst = new TH1D(ti_p2_pT_Dst,ti_p2_pT_Dst,50,0,10);
   myList->Add(p2_pT_Dst);
+
+#ifndef ABB
+  TH1D *p3_pT_Dst = new TH1D(ti_p3_pT_Dst,ti_p3_pT_Dst,50,0,10);
   myList->Add(p3_pT_Dst);
+#endif
+
   myList->Add(cluster_pT_Dst);
   
   double dpT = p1_pT_Dst->GetBinWidth(1);
@@ -76,11 +81,13 @@ int main(int argc, char **argv)
   const int numEvt=10000;
 
   TLorentzVector mP_p1[num_p1];
-  TLorentzVector mP_p2[num_p2];
-  TLorentzVector mP_p3[num_p3];
   TLorentzVector mR_p1[num_p1];
+  TLorentzVector mP_p2[num_p2];
   TLorentzVector mR_p2[num_p2];
+#ifndef ABB
+  TLorentzVector mP_p3[num_p3];
   TLorentzVector mR_p3[num_p3];
+#endif
 
   double pT;
   double phi_p;
@@ -105,12 +112,14 @@ int main(int argc, char **argv)
 
   cout<<"func_p2 created!!!"<<endl;
 
+#ifndef ABB
   TF1 *func_pT_p3 = new TF1(ti_func_pT_p3,dN_momentum_BLW,0.,10,3);
   func_pT_p3->SetParameters(m[2]/fmmev/1000/*GeV*/, Tkin_p3,rho_0_p3);
 
   TF2 *func_coordinates_p3 = new TF2(ti_func_coordinates_p3,dN_coordinates,0,R0, -0.5,0.5, 7);//
 
   cout<<"func_p3 created!!!"<<endl;
+#endif
 
   TF1 *func_tau = new TF1("func_tau",dN_tau,tau0-0.5*delta_tau, tau0+0.5*delta_tau, 2);
   func_tau->SetParameters(tau0, delta_tau);
@@ -189,6 +198,7 @@ int main(int argc, char **argv)
 		}
 
 		//p3
+#ifndef ABB
 		for(int ipart=0; ipart<num_p3; ipart++)
 		{
 			pT = func_pT_p3->GetRandom();
@@ -208,8 +218,13 @@ int main(int argc, char **argv)
 			mP_p3[ipart].SetPxPyPzE(pT*cos(phi_p), pT*sin(phi_p), mT*sinh(eta_p), mT*cosh(eta_p));
 			mR_p3[ipart].SetXYZT(r_rho*cos(phi_s), r_rho*sin(phi_s), tau*sinh(eta_s), tau*cosh(eta_s));
 		}
+#endif
 
+#ifdef ABB
+		coal_p1p2p3(mP_p1, mR_p1, mP_p2, mR_p2, mP_p2, mR_p2, num_p1, num_p2, num_p2);
+#else
 		coal_p1p2p3(mP_p1, mR_p1, mP_p2, mR_p2, mP_p3, mR_p3, num_p1, num_p2, num_p3);
+#endif
 
 		cout<<ievt+1<<" events finished"<<endl;
 	}
@@ -377,13 +392,16 @@ void coal_p1p2p3(TLorentzVector *vmP_p1, TLorentzVector *vmR_p1, TLorentzVector 
 		{
 			mP[1] = vmP_p2[j];
 			mR[1] = vmR_p2[j];
-			for(int j=0; j<vnum_p3; j++)
+			for(int l=0; l<vnum_p3; l++)
 			{
-				mP[2] = vmP_p3[j];
-				mR[2] = vmR_p3[j];
+#ifdef ABB
+				if(j==l)continue;
+#endif
+				mP[2] = vmP_p3[l];
+				mR[2] = vmR_p3[l];
 
-				mP_p1p2p3.SetVectM((mP[0] + mP[1] + mP[3]).Vect(), M/fmmev/1000/*GeV*/);
-				if(mP_p1p2p3.Pt()<1e-7) continue;
+				mP_p1p2p3.SetVectM((mP[0] + mP[1] + mP[2]).Vect(), M/fmmev/1000/*GeV*/);
+				if(mP_p1p2p3.Pt()<1.e-7) continue;
 				//if(fabs(mP_p1p2.Rapidity())>0.5) continue;
 
 				rho_W = rho_wigner(mP, mR);
