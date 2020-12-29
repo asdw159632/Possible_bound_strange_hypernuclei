@@ -382,12 +382,13 @@ void coal_p1p2p3(TLorentzVector *vmP_p1, TLorentzVector *vmR_p1, TLorentzVector 
 				mP[2] = vmP_p3[j];
 				mR[2] = vmR_p3[j];
 
-				mP_p1p2p3.SetVectM((mP[0] + mP[1] + mP[3]).Vect(), M/1000/*GeV*/);
+				mP_p1p2p3.SetVectM((mP[0] + mP[1] + mP[3]).Vect(), M/fmmev/1000/*GeV*/);
 				if(mP_p1p2p3.Pt()<1e-7) continue;
 				//if(fabs(mP_p1p2.Rapidity())>0.5) continue;
 
 				rho_W = rho_wigner(mP, mR);
 				//if(rho_W<1e-20) continue;
+				//if(rho_W>0)cout<<"Fill: "<<mP_p1p2p3.Pt()<<" "<<1./(2.*Pi*mP_p1p2p3.Pt()*dpT) * rho_W * GA<<endl;
 
 				cluster_pT_Dst->Fill(mP_p1p2p3.Pt(), 1./(2.*Pi*mP_p1p2p3.Pt()*dpT) * rho_W * GA);
 			}
@@ -517,7 +518,7 @@ double rho_wigner(TLorentzVector *vcompP, TLorentzVector *vcompR)
 	int thetaBin = rho_density->GetZaxis()->FindBin(theta);
 
   rhoWH = rho_density->GetBinContent(rBin, kBin, thetaBin); 
-	//cout<<rhoWH<<endl;
+	//if(rhoWH>0)cout<<rhoWH<<endl;
 
   if(std::isnan(rhoWH)||std::isinf(rhoWH)) return 0;
 
