@@ -98,7 +98,7 @@ int main(int argc, char **argv)
   double eta_s;
   double phi_s;
 
-  TF1 *func_pT_p1 = new TF1(ti_func_pT_p1,dN_momentum_BLW,0.,10,3);
+  TF1 *func_pT_p1 = new TF1(ti_func_pT_p1,dN_momentum_BLW,0.,10.,3);
   func_pT_p1->SetParameters(m[0]/fmmev/1000/*GeV*/, Tkin_p1,rho_0_p1);
 
   TF2 *func_coordinates_p1 = new TF2(ti_func_coordinates_p1,dN_coordinates,0,R0, -0.5,0.5, 7);//
@@ -197,8 +197,8 @@ int main(int argc, char **argv)
 			mR_p2[ipart].SetXYZT(r_rho*cos(phi_s), r_rho*sin(phi_s), tau*sinh(eta_s), tau*cosh(eta_s));
 		}
 
-		//p3
 #ifndef ABB
+		//p3
 		for(int ipart=0; ipart<num_p3; ipart++)
 		{
 			pT = func_pT_p3->GetRandom();
@@ -392,17 +392,14 @@ void coal_p1p2p3(TLorentzVector *vmP_p1, TLorentzVector *vmR_p1, TLorentzVector 
 		{
 			mP[1] = vmP_p2[j];
 			mR[1] = vmR_p2[j];
-			for(int l=0; l<vnum_p3; l++)
+			for(int l=j+1; l<vnum_p3; l++)
 			{
-#ifdef ABB
-				if(j==l)continue;
-#endif
 				mP[2] = vmP_p3[l];
 				mR[2] = vmR_p3[l];
 
 				mP_p1p2p3.SetVectM((mP[0] + mP[1] + mP[2]).Vect(), M/fmmev/1000/*GeV*/);
-				if(mP_p1p2p3.Pt()<1.e-7) continue;
-				//if(fabs(mP_p1p2.Rapidity())>0.5) continue;
+				//if(mP_p1p2p3.Pt()<1.e-7) continue;
+				if(fabs(mP_p1p2p3.Rapidity())>0.5) continue;
 
 				rho_W = rho_wigner(mP, mR);
 				//if(rho_W<1e-20) continue;
@@ -536,7 +533,7 @@ double rho_wigner(TLorentzVector *vcompP, TLorentzVector *vcompR)
 	int thetaBin = rho_density->GetZaxis()->FindBin(theta);
 
   rhoWH = rho_density->GetBinContent(rBin, kBin, thetaBin); 
-	//if(rhoWH>0)cout<<rhoWH<<endl;
+	if(rhoWH>0)cout<<"("<<rBin<<" "<<kBin<<" "<<thetaBin<<"): "<<rhoWH<<endl;
 
   if(std::isnan(rhoWH)||std::isinf(rhoWH)) return 0;
 
