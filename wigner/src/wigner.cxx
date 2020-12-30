@@ -270,7 +270,7 @@ double wignerdst_Integrand(double *x,double *par)//no angle relate
 
 	res*=pow(y,5)*pow(sin(theta_y1),4)*2*Pi*Pi;//volume element of hyper-spherical coordinate (y,theta_y1,theta_y2,theta_y3,theta_y4,phi_y);
 
-	res/=pow(2.*Pi,6);//fourie transform normalization coefficient
+	//res/=pow(2.*Pi,6);//fourie transform normalization coefficient
 
 	//res*=Pi*Pi*Pi*pow(r,5);//volume element of vec_r;
 	//res*=8./3.*Pi*Pi*pow(p,5)*pow(sin(theta),4);//volume element of vec_p;
