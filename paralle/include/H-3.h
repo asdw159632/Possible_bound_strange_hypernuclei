@@ -19,7 +19,10 @@ const int Ptotal=1;
 char nuclear[]="H_3";
 
 #define ABB
+#define E2_76TeV
+//#define E200GeV
 
+#ifdef E200GeV
 //proton
 double Tkin_p1 = 0.1116;//GeV
 double rho_0_p1 = 0.98;
@@ -29,6 +32,17 @@ const int num_p1 = 35;//_arry=40;//int((gRandom->Rndm()-0.5)*10.)+35;//38;//
 double Tkin_p2 = 0.1116;//GeV
 double rho_0_p2 = 0.98;
 const int num_p2 = 35;//_arry=40;//int((gRandom->Rndm()-0.5)*10.)+38;//
+#elif defined E2_76TeV
+//proton
+double Tkin_p1 = 0.122;//GeV
+double rho_0_p1 = 1.2;
+const int num_p1 = 35;//_arry=40;//int((gRandom->Rndm()-0.5)*10.)+35;//38;//
+
+//neutron
+double Tkin_p2 = 0.122;//GeV
+double rho_0_p2 = 1.2;
+const int num_p2 = 35;//_arry=40;//int((gRandom->Rndm()-0.5)*10.)+38;//
+#endif
 
 /*neutron2
 double Tkin_p3 = 0.1116;//GeV
@@ -47,8 +61,9 @@ char ti_func_coordinates_p1[]="func_coordinates_proton";
 char ti_func_coordinates_p2[]="func_coordinates_neutron";
 //char ti_func_coordinates_p3[]="func_coordinates_neutron2";
 
-Double_t GA = 1./3.;//GA=g0_A+2*g0_12->D*g0_D3
-//g0=(SA*2+1)/((s1*2+1)*...*(sn*2+1))/NI;
+Double_t GA = 1./4.;
+//GA=(SA*2+1)/((s1*2+1)*...*(sn*2+1))/NI;
+//NI=1;
 //NI counts the iospin state
 //A. Polleri, R. Mattiello, I.N. Mishustin, J.P. Bondorf, Nucl. Phys. A 661 (1999) 452.
 

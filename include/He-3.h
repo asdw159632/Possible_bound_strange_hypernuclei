@@ -61,9 +61,9 @@ char ti_func_coordinates_p1[]="func_coordinates_neutron";
 char ti_func_coordinates_p2[]="func_coordinates_proton";
 //char ti_func_coordinates_p3[]="func_coordinates_proton2";
 
-Double_t GA = 1./3.;//GA=g0_A+2*g0_12->D*g0_D3
-//g0=(SA*2+1)/((s1*2+1)*...*(sn*2+1))/NI;
-//NI counts the iospin state
+Double_t GA = 1./4.;
+//GA=(SA*2+1)/((s1*2+1)*...*(sn*2+1))/NI;
+//NI counts the iospin state take it as 1
 //A. Polleri, R. Mattiello, I.N. Mishustin, J.P. Bondorf, Nucl. Phys. A 661 (1999) 452.
 
 #define He_3
