@@ -6,17 +6,17 @@ using namespace std;
 //#include "../../include/He-3.h"
 //#include "../../include/NNOmega.h"
 
-///////////////////////////////////////
-//
-//Au+Au 200GeV
-//
-///////////////////////////////////////
-
 TH3D *rho_density;
 
+#ifdef E200GeV
 double R0 = 12;//fm
 double tau0 = 9;//fm/c
-double delta_tau = 3.5;//fm/c  
+double delta_tau = 3.5;//fm/c  */
+#elif defined E2_76TeV
+double R0 = 19.7;//fm
+double tau0 = 15.5;//fm/c
+double delta_tau = 1;//fm/c  */
+#endif
 
 double hbar = 197.3269788;// MeV fm/c
 double aBorhr=1;//fm
@@ -31,7 +31,7 @@ Double_t dN_tau(double *x, double *par);
 void coal_p1p2p3(TLorentzVector *vmP_p1, TLorentzVector *vmR_p1, TLorentzVector *vmP_p2, TLorentzVector *vmR_p2, TLorentzVector *vmP_p3, TLorentzVector *vmR_p3, int vnum_p1, int vnum_p2, int vnum_p3);
 double rho_wigner(TLorentzVector *vcompP, TLorentzVector *vcompR);
 
-TH1D *cluster_pT_Dst = new TH1D("cluster_pT_Dst","cluster_pT_Dst",100,0,10);
+TH1D *cluster_pT_Dst = new TH1D("cluster_pT_Dst","cluster_pT_Dst",100,0,5);
 
 Long_t nseed_cmd();
 void executeCMD(const char *cmd, char *result);
@@ -63,14 +63,14 @@ int main(int argc, char **argv)
   //ku = hbar/aBorhr;// MeV/c  for momentum unit
   //init par end
 
-  TH1D *p1_pT_Dst = new TH1D(ti_p1_pT_Dst,ti_p1_pT_Dst,50,0,10);
+  TH1D *p1_pT_Dst = new TH1D(ti_p1_pT_Dst,ti_p1_pT_Dst,50,0,5);
   myList->Add(p1_pT_Dst);
 
-  TH1D *p2_pT_Dst = new TH1D(ti_p2_pT_Dst,ti_p2_pT_Dst,50,0,10);
+  TH1D *p2_pT_Dst = new TH1D(ti_p2_pT_Dst,ti_p2_pT_Dst,50,0,5);
   myList->Add(p2_pT_Dst);
 
 #ifndef ABB
-  TH1D *p3_pT_Dst = new TH1D(ti_p3_pT_Dst,ti_p3_pT_Dst,50,0,10);
+  TH1D *p3_pT_Dst = new TH1D(ti_p3_pT_Dst,ti_p3_pT_Dst,50,0,5);
   myList->Add(p3_pT_Dst);
 #endif
 
@@ -78,7 +78,7 @@ int main(int argc, char **argv)
   
   double dpT = p1_pT_Dst->GetBinWidth(1);
 
-  const int numEvt=10000;
+  const int numEvt=100000;
 
   TLorentzVector mP_p1[num_p1];
   TLorentzVector mR_p1[num_p1];
@@ -98,14 +98,14 @@ int main(int argc, char **argv)
   double eta_s;
   double phi_s;
 
-  TF1 *func_pT_p1 = new TF1(ti_func_pT_p1,dN_momentum_BLW,0.,10.,3);
+  TF1 *func_pT_p1 = new TF1(ti_func_pT_p1,dN_momentum_BLW,0.,5.,3);
   func_pT_p1->SetParameters(m[0]/fmmev/1000/*GeV*/, Tkin_p1,rho_0_p1);
 
   TF2 *func_coordinates_p1 = new TF2(ti_func_coordinates_p1,dN_coordinates,0,R0, -0.5,0.5, 7);//
 
   cout<<"func_p1 created!!!"<<endl;
 
-  TF1 *func_pT_p2 = new TF1(ti_func_pT_p2,dN_momentum_BLW,0.,10,3);
+  TF1 *func_pT_p2 = new TF1(ti_func_pT_p2,dN_momentum_BLW,0.,5,3);
   func_pT_p2->SetParameters(m[1]/fmmev/1000/*GeV*/, Tkin_p2,rho_0_p2);
 
   TF2 *func_coordinates_p2 = new TF2(ti_func_coordinates_p2,dN_coordinates,0,R0, -0.5,0.5, 7);//
@@ -113,7 +113,7 @@ int main(int argc, char **argv)
   cout<<"func_p2 created!!!"<<endl;
 
 #ifndef ABB
-  TF1 *func_pT_p3 = new TF1(ti_func_pT_p3,dN_momentum_BLW,0.,10,3);
+  TF1 *func_pT_p3 = new TF1(ti_func_pT_p3,dN_momentum_BLW,0.,5,3);
   func_pT_p3->SetParameters(m[2]/fmmev/1000/*GeV*/, Tkin_p3,rho_0_p3);
 
   TF2 *func_coordinates_p3 = new TF2(ti_func_coordinates_p3,dN_coordinates,0,R0, -0.5,0.5, 7);//
@@ -403,7 +403,7 @@ void coal_p1p2p3(TLorentzVector *vmP_p1, TLorentzVector *vmR_p1, TLorentzVector 
 
 				rho_W = rho_wigner(mP, mR);
 				//if(rho_W<1e-20) continue;
-				//if(rho_W>0)cout<<"Fill: "<<mP_p1p2p3.Pt()<<" "<<1./(2.*Pi*mP_p1p2p3.Pt()*dpT) * rho_W * GA<<endl;
+				//if(rho_W>1e-5)cout<<"Fill: "<<mP_p1p2p3.Pt()<<" "<<1./(2.*Pi*mP_p1p2p3.Pt()*dpT) * rho_W * GA<<endl;
 
 				cluster_pT_Dst->Fill(mP_p1p2p3.Pt(), 1./(2.*Pi*mP_p1p2p3.Pt()*dpT) * rho_W * GA);
 			}

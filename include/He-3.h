@@ -19,16 +19,30 @@ const int Ptotal=1;
 char nuclear[]="He_3";
 
 #define ABB
+#define E2_76TeV
+//#define E200GeV
 
-//neutron
+#ifdef E200GeV
+//proton
 double Tkin_p1 = 0.1116;//GeV
 double rho_0_p1 = 0.98;
-const int num_p1 = 35;//_arry=40;//int((gRandom->Rndm()-0.5)*10.)+38;//
+const int num_p1 = 35;//_arry=40;//int((gRandom->Rndm()-0.5)*10.)+35;//38;//
 
-//proton
+//neutron
 double Tkin_p2 = 0.1116;//GeV
 double rho_0_p2 = 0.98;
-const int num_p2 = 35;//_arry=40;//int((gRandom->Rndm()-0.5)*10.)+35;//38;//
+const int num_p2 = 35;//_arry=40;//int((gRandom->Rndm()-0.5)*10.)+38;//
+#elif defined E2_76TeV
+//proton
+double Tkin_p1 = 0.122;//GeV
+double rho_0_p1 = 1.2;
+const int num_p1 = 35;//_arry=40;//int((gRandom->Rndm()-0.5)*10.)+35;//38;//
+
+//neutron
+double Tkin_p2 = 0.122;//GeV
+double rho_0_p2 = 1.2;
+const int num_p2 = 35;//_arry=40;//int((gRandom->Rndm()-0.5)*10.)+38;//
+#endif
 
 /*proton2
 double Tkin_p3 = 0.1116;//GeV

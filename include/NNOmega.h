@@ -7,11 +7,20 @@
 //#define nnOmega
 //#define ppOmega
 
+#define E2_76TeV
+//#define E200GeV
 
 //Omega
+#ifdef E200GeV
 double Tkin_p1 = 0.1116;//GeV
 double rho_0_p1 = 0.9;
 const int num_p1 = 1;
+#elif defined E2_76TeV
+double Tkin_p1 = 0.122;//GeV
+double rho_0_p1 = 1.07;
+const int num_p1 = 1;
+#endif
+
 char ti_p1_pT_Dst[]="Omega_pT_Dst";
 char ti_func_pT_p1[]="func_pT_Omega";
 char ti_func_coordinates_p1[]="func_coordinates_Omega";
@@ -24,6 +33,7 @@ const int two_J=5;
 const int tjkmin=0;
 const int tjkmax=0;
 
+#ifdef E200GeV
 //proton
 double Tkin_p2 = 0.1116;//GeV
 double rho_0_p2 = 0.98;
@@ -33,6 +43,17 @@ const int num_p2 = 35;//_arry=40;//int((gRandom->Rndm()-0.5)*10.)+35;//38;//
 double Tkin_p3 = 0.1116;//GeV
 double rho_0_p3 = 0.98;
 const int num_p3 = 35;//_arry=40;//int((gRandom->Rndm()-0.5)*10.)+38;//
+#elif defined E2_76TeV
+//proton
+double Tkin_p2 = 0.122;//GeV
+double rho_0_p2 = 1.2;
+const int num_p2 = 35;//_arry=40;//int((gRandom->Rndm()-0.5)*10.)+35;//38;//
+
+//neutron
+double Tkin_p3 = 0.122;//GeV
+double rho_0_p3 = 1.2;
+const int num_p3 = 35;//_arry=40;//int((gRandom->Rndm()-0.5)*10.)+38;//
+#endif
 
 char ti_p2_pT_Dst[]="proton_pT_Dst";
 char ti_p3_pT_Dst[]="neutron_pT_Dst";
@@ -51,6 +72,7 @@ Double_t GA = ;//GA=g0_A+2*g0_12->D*g0_D3
 #endif
 
 #ifdef nnOmega
+#define ABB
 double m[3]={mOmega,mn,mn};
 char nuclear[]="nnOmega";
 const int two_T=2;
@@ -59,27 +81,34 @@ const int tjkmin=1;
 const int tjkmax=1;
 
 //neutron
+#ifdef E200GeV
 double Tkin_p2 = 0.1116;//GeV
 double rho_0_p2 = 0.98;
 const int num_p2 = 35;//_arry=40;//int((gRandom->Rndm()-0.5)*10.)+35;//38;//
+#elif defined E2_76TeV
+double Tkin_p2 = 0.122;//GeV
+double rho_0_p2 = 1.2;
+const int num_p2 = 35;//_arry=40;//int((gRandom->Rndm()-0.5)*10.)+35;//38;//
+#endif
 
-//neutron
+/*neutron
 double Tkin_p3 = 0.1116;//GeV
 double rho_0_p3 = 0.98;
-const int num_p3 = 35;//_arry=40;//int((gRandom->Rndm()-0.5)*10.)+38;//
+const int num_p3 = 35;//_arry=40;//int((gRandom->Rndm()-0.5)*10.)+38;*/
 
 char ti_p2_pT_Dst[]="neutron_pT_Dst";
-char ti_p3_pT_Dst[]="neutron_pT_Dst";
+//char ti_p3_pT_Dst[]="neutron_pT_Dst";
 
 char ti_func_pT_p2[]="func_pT_neutron";
-char ti_func_pT_p3[]="func_pT_neutron";
+//char ti_func_pT_p3[]="func_pT_neutron";
 
 char ti_func_coordinates_p2[]="func_coordinates_neutron";
-char ti_func_coordinates_p3[]="func_coordinates_neutron";
+//char ti_func_coordinates_p3[]="func_coordinates_neutron";
 
 #endif
 
 #ifdef ppOmega
+#define ABB
 double m[3]={mOmega,mp,mp};
 char nuclear[]="ppOmega";
 const int two_T=2;
@@ -88,23 +117,29 @@ const int tjkmin=1;
 const int tjkmax=1;
 
 //proton
+#ifdef E200GeV
 double Tkin_p2 = 0.1116;//GeV
 double rho_0_p2 = 0.98;
 const int num_p2 = 35;//_arry=40;//int((gRandom->Rndm()-0.5)*10.)+35;//38;//
+#elif defined E2_76TeV
+double Tkin_p2 = 0.122;//GeV
+double rho_0_p2 = 1.2;
+const int num_p2 = 35;//_arry=40;//int((gRandom->Rndm()-0.5)*10.)+35;//38;//
+#endif
 
-//proton
+/*proton
 double Tkin_p3 = 0.1116;//GeV
 double rho_0_p3 = 0.98;
-const int num_p3 = 35;//_arry=40;//int((gRandom->Rndm()-0.5)*10.)+38;//
+const int num_p3 = 35;//_arry=40;//int((gRandom->Rndm()-0.5)*10.)+38;*/
 
 char ti_p2_pT_Dst[]="proton_pT_Dst";
-char ti_p3_pT_Dst[]="proton_pT_Dst";
+//char ti_p3_pT_Dst[]="proton_pT_Dst";
 
 char ti_func_pT_p2[]="func_pT_proton";
-char ti_func_pT_p3[]="func_pT_proton";
+//char ti_func_pT_p3[]="func_pT_proton";
 
 char ti_func_coordinates_p2[]="func_coordinates_proton";
-char ti_func_coordinates_p3[]="func_coordinates_proton";
+//char ti_func_coordinates_p3[]="func_coordinates_proton";
 
 #endif
 

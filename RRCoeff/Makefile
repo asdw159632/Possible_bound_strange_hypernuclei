@@ -116,7 +116,7 @@ all: analysis
 
 
 analysis : $(OBJS)
-	$(LD) $(LDFLAGS) $(LDINC) $(XM_LIBS) $^ $(LDLIB) $(ROOTLIBS) $(ROOTLOADLIBS) $(MYLIB) $(GFLIBS) -o $(BIN)$(notdir $@)
+	$(LD) $(LDFLAGS) $(LDINC) $(XM_LIBS) $^ $(LDLIB) $(ROOTLIBS) $(ROOTLOADLIBS) $(GFLIBS) -o $(BIN)$(notdir $@)
 	@echo
 
 

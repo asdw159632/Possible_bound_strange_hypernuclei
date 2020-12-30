@@ -11,21 +11,23 @@ void draw()
 	int num_p=0;
 	ifstream readdata;
 
-	readdata.open("RHIC-AUAU-p.txt");
+	readdata.open("ALICE-PbPb-p.txt");
+	//readdata.open("RHIC-AUAU-p.txt");
 	while(readdata>>pT>>product)
 	{
 		exppT_p[num_p]=pT;
-		expproduct_p[num_p]=product*80000.;
+		expproduct_p[num_p]=product;
 		num_p++;
 	}
 	readdata.close();
 	TGraph *expdata_p=new TGraph(num_p,exppT_p,expproduct_p);
 
-	readdata.open("RHIC-AUAU-triton.txt");
+	readdata.open("ALICE-PbPb-He3.txt");
+	//readdata.open("RHIC-AUAU-triton.txt");
 	while(readdata>>pT>>product)
 	{
 		exppT_t[num_t]=pT;
-		expproduct_t[num_t]=product*80000./4;
+		expproduct_t[num_t]=product;
 		num_t++;
 	}
 	readdata.close();
@@ -42,6 +44,13 @@ void draw()
 	TFile readroot("result-all.root","read");
 	TH1D *model_p=(TH1D*)readroot.Get("proton_pT_Dst");
 	TH1D *model_t=(TH1D*)readroot.Get("cluster_pT_Dst");
+	TH1F *hevt=(TH1F*)readroot.Get("h1_event");
+
+	int Nevent=hevt->GetBinContent(1);
+	TF1 *divevt=new TF1("divevt","1",0,5);
+
+	model_p->Divide(divevt,Nevent);
+	model_t->Divide(divevt,Nevent/pow(2*Pi,6));
 
 	model_p->SetMarkerStyle(kOpenCircle);
 	model_p->SetMarkerColor(1);
@@ -51,7 +60,7 @@ void draw()
 	model_t->SetMarkerColor(9);
 	model_t->SetMarkerSize(1);
 
-	TH2D *blank=new TH2D("backgrand","title",10,0.,10.,10,1.e-9,1.e6);
+	TH2D *blank=new TH2D("backgrand","title",10,0.,5.,10,1.e-10,1.e2);
 	
 	TCanvas c1("c1","c1",20,10,800,600);
 	gPad->SetLogy();
@@ -68,7 +77,7 @@ void draw()
 	legend->AddEntry(model_p,"blwc proton");
 	legend->AddEntry(expdata_p,"exp proton");
 	legend->AddEntry(model_t,"blwc triton");
-	legend->AddEntry(expdata_t,"exp triton");
+	legend->AddEntry(expdata_t,"exp He3");
 	legend->Draw();
 
 	TFile save("picture.root","recreate");
