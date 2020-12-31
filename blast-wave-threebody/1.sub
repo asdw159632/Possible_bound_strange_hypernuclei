@@ -1,7 +1,6 @@
 Universe = vanilla
 Notification = Error
 Initialdir = .
-Requirements = Ma==SERVER64
 Arguments = $(Process)
 Executable = exec.sh
 Output = ./condor/job_$(Process).out

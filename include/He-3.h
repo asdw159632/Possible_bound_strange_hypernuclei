@@ -19,8 +19,8 @@ const int Ptotal=1;
 char nuclear[]="He_3";
 
 #define ABB
-#define E2_76TeV
-//#define E200GeV
+
+#define coulomb23 1
 
 #ifdef E200GeV
 //proton

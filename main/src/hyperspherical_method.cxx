@@ -28,6 +28,9 @@ using namespace std;
 double V23(int sjk, double r, double alpha);
 double V13(int sjk, double r, double alpha);
 double V12(int sjk, double r, double alpha);
+double Vc23(double r, double alpha);
+double Vc13(double r, double alpha);
+double Vc12(double r, double alpha);
 //Initialization of potential done
 
 /////////////////////////
@@ -331,6 +334,21 @@ double V13(int sjk, double r, double alpha)
 	return V;
 }
 
+double Vc12(double r, double alpha)
+{
+	return Vc(r12(r,alpha));
+}
+
+double Vc13(double r, double alpha)
+{
+	return Vc(r13(r,alpha));
+}
+
+double Vc23(double r, double alpha)
+{
+	return Vc(r23(r,alpha));
+}
+
 /*double orthbasis_radial(double r, int n)//number l and variation parameter c is defined as global.
 {
 	if(n<l+1)return 0;
@@ -417,6 +435,9 @@ double integrand_H(double *x, double *Par)
 	if(lx1==lx2 && ly1==ly2)
 	{
 		base2=V23(sjk1,r,alpha)*orthbasis_radial(r,base_n)*orthbasis_radial(r,base_m)*orthbasis_alpha(q1,lx1,ly1,alpha)*orthbasis_alpha(q2,lx2,ly2,alpha);
+#ifdef coulomb23
+		base2+=coulomb23*Vc23(r,alpha)*orthbasis_radial(r,base_n)*orthbasis_radial(r,base_m)*orthbasis_alpha(q1,lx1,ly1,alpha)*orthbasis_alpha(q2,lx2,ly2,alpha);
+#endif
 	}
 
 	double base3=0;
@@ -427,9 +448,20 @@ double integrand_H(double *x, double *Par)
 			if(lxs+lys<L1 || abs(lxs-lys)>L1 || lxs+lys>K1 || lxs+lys>K2 || (K1-lxs-lys)%2!=0 || (K2-lxs-lys)%2!=0)continue;
 			int qs1=(K1-lxs-lys)/2;
 			int qs2=(K2-lxs-lys)/2;
+
+#ifdef coulomb12
+			base3+=RRM(1,2,q1,lx1,ly1,qs1,lxs)*RRM(2,1,qs2,lxs,lys,q2,lx2)*Vc12(r,alpha)*coulomb12/2.*
+				       orthbasis_radial(r,base_n)*orthbasis_radial(r,base_m)*
+								 orthbasis_alpha(qs1,lxs,lys,alpha)*orthbasis(qs2,lxs,lys,alpha);
+#endif
+#ifdef coulomb23
+			base3+=RRM(1,3,q1,lx1,ly1,qs1,lxs)*RRM(3,1,qs2,lxs,lys,q2,lx2)*Vc13(r,alpha)*coulomb23/2.*
+				       orthbasis_radial(r,base_n)*orthbasis_radial(r,base_m)*
+								 orthbasis_alpha(qs1,lxs,lys,alpha)*orthbasis(qs2,lxs,lys,alpha);
+#endif
+
 #ifdef NNOmega
-			base3+=RRM(1,2,q1,lx1,ly1,qs1,lxs,lys)*RRM(2,1,qs2,lxs,lys,q2,lx2,ly2)*V12(2,r,alpha)*
-			//base3+=RRM(1,2,q1,lx1,ly1,qs1,lxs,lys)*RRM(1,2,q2,lx2,ly2,qs2,lxs,lys)*V12(2,r,alpha)*
+			base3+=RRM(1,2,q1,lx1,ly1,qs1,lxs)*RRM(2,1,qs2,lxs,lys,q2,lx2)*V12(2,r,alpha)*
 				       orthbasis_radial(r,base_n)*orthbasis_radial(r,base_m)*
 								 orthbasis_alpha(qs1,lxs,lys,alpha)*orthbasis(qs2,lxs,lys,alpha);
 #else
@@ -437,7 +469,6 @@ double integrand_H(double *x, double *Par)
 			{
 				if(two_sjks+two_s2<two_Sa1 || abs(two_sjks-two_s2)>two_Sa1)continue;
 				base3+=RRM(1,2,q1,lx1,ly1,qs1,lxs)*RRM(2,1,qs2,lxs,lys,q2,lx2)*V12(two_sjks/2,r,alpha)*
-				//base3+=RRM(1,2,q1,lx1,ly1,qs1,lxs)*RRM(1,2,q2,lx2,ly2,qs2,lxs)*V12(two_sjks/2,r,alpha)*
 								Wcoeff(two_s1,two_s3,two_sjks,two_s2,two_Sa1,2*sjk1)*Wcoeff(two_s2,two_s3,2*sjk2,two_s1,two_Sa2,two_sjks)*
 				          orthbasis_radial(r,base_n)*orthbasis_radial(r,base_m)*
 								    orthbasis_alpha(qs1,lxs,lys,alpha)*orthbasis_alpha(qs2,lxs,lys,alpha);

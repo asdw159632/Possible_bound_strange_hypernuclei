@@ -7,18 +7,15 @@
 //#define nnOmega
 //#define ppOmega
 
-#define E2_76TeV
-//#define E200GeV
-
 //Omega
 #ifdef E200GeV
 double Tkin_p1 = 0.1116;//GeV
 double rho_0_p1 = 0.9;
-const int num_p1 = 1;
+const int num_p1 = 100;//need to divide 100*1.8
 #elif defined E2_76TeV
 double Tkin_p1 = 0.122;//GeV
 double rho_0_p1 = 1.07;
-const int num_p1 = 1;
+const int num_p1 = 100;//need to divide 100*1.9785995
 #endif
 
 char ti_p1_pT_Dst[]="Omega_pT_Dst";
@@ -26,6 +23,9 @@ char ti_func_pT_p1[]="func_pT_Omega";
 char ti_func_coordinates_p1[]="func_coordinates_Omega";
 
 #ifdef pnOmega
+
+#define coulomb12 1
+
 double m[3]={mOmega,mp,mn};
 char nuclear[]="pnOmega";
 const int two_T=0;
@@ -37,12 +37,12 @@ const int tjkmax=0;
 //proton
 double Tkin_p2 = 0.1116;//GeV
 double rho_0_p2 = 0.98;
-const int num_p2 = 35;//_arry=40;//int((gRandom->Rndm()-0.5)*10.)+35;//38;//
+const int num_p2 = 17;//_arry=40;//int((gRandom->Rndm()-0.5)*10.)+35;//38;//
 
 //neutron
 double Tkin_p3 = 0.1116;//GeV
 double rho_0_p3 = 0.98;
-const int num_p3 = 35;//_arry=40;//int((gRandom->Rndm()-0.5)*10.)+38;//
+const int num_p3 = 17;//_arry=40;//int((gRandom->Rndm()-0.5)*10.)+38;//
 #elif defined E2_76TeV
 //proton
 double Tkin_p2 = 0.122;//GeV
@@ -114,6 +114,11 @@ Double_t GA = 1./4.;
 
 #ifdef ppOmega
 #define ABB
+
+#define coulomb12 1
+#define coulomb23 -1
+#define coulomb13 1
+
 double m[3]={mOmega,mp,mp};
 char nuclear[]="ppOmega";
 const int two_T=2;

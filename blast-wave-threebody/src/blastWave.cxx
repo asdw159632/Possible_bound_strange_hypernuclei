@@ -2,9 +2,12 @@
 
 using namespace std;
 
-#include "../../include/H-3.h"
+#define E2_76TeV
+//#define E200GeV
+
+//#include "../../include/H-3.h"
 //#include "../../include/He-3.h"
-//#include "../../include/NNOmega.h"
+#include "../../include/NNOmega.h"
 
 TH3D *rho_density;
 
@@ -78,7 +81,7 @@ int main(int argc, char **argv)
   
   double dpT = p1_pT_Dst->GetBinWidth(1);
 
-  const int numEvt=100000;
+  const int numEvt=10000;
 
   TLorentzVector mP_p1[num_p1];
   TLorentzVector mR_p1[num_p1];
@@ -533,7 +536,7 @@ double rho_wigner(TLorentzVector *vcompP, TLorentzVector *vcompR)
 	int thetaBin = rho_density->GetZaxis()->FindBin(theta);
 
   rhoWH = rho_density->GetBinContent(rBin, kBin, thetaBin); 
-	if(rhoWH>0)cout<<"("<<rBin<<" "<<kBin<<" "<<thetaBin<<"): "<<rhoWH<<endl;
+	//if(rhoWH>0)cout<<"("<<rBin<<" "<<kBin<<" "<<thetaBin<<"): "<<rhoWH<<endl;
 
   if(std::isnan(rhoWH)||std::isinf(rhoWH)) return 0;
 
