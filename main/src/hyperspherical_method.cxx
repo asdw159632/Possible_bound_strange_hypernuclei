@@ -463,7 +463,7 @@ double integrand_H(double *x, double *Par)
 #ifdef NNOmega
 			base3+=RRM(1,2,q1,lx1,ly1,qs1,lxs)*RRM(2,1,qs2,lxs,lys,q2,lx2)*V12(2,r,alpha)*
 				       orthbasis_radial(r,base_n)*orthbasis_radial(r,base_m)*
-								 orthbasis_alpha(qs1,lxs,lys,alpha)*orthbasis(qs2,lxs,lys,alpha);
+								 orthbasis_alpha(qs1,lxs,lys,alpha)*orthbasis_alpha(qs2,lxs,lys,alpha);
 #else
 			for(int two_sjks=abs(two_s1-two_s3);two_sjks<=(two_s1+two_s3);two_sjks+=2)
 			{
