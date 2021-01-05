@@ -27,8 +27,8 @@ using namespace std;
 //#include "../../include/H-3.h"
 //#include "../../include/He-3.h"
 #include "../../include/pnOmega.h"
-#include "../../include/nnOmega.h"
-#include "../../include/ppOmega.h"
+//#include "../../include/nnOmega.h"
+//#include "../../include/ppOmega.h"
 
 double r23(double r, double alpha);
 double r13(double r, double alpha);
