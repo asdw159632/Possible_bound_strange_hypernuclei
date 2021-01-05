@@ -21,9 +21,9 @@ using namespace std;
 #include "../../include/potential.h"
 
 //choice a system, choice H_3, He_3 or NNOmega
-#include "../../include/H-3.h"
+//#include "../../include/H-3.h"
 //#include "../../include/He-3.h"
-//#include "../../include/NNOmega.h"//choose different NN-pair in NNOmega.h
+#include "../../include/NNOmega.h"//choose different NN-pair in NNOmega.h
 
 double V23(int sjk, double r, double alpha);
 double V13(int sjk, double r, double alpha);
@@ -452,12 +452,12 @@ double integrand_H(double *x, double *Par)
 #ifdef coulomb12
 			base3+=RRM(1,2,q1,lx1,ly1,qs1,lxs)*RRM(2,1,qs2,lxs,lys,q2,lx2)*Vc12(r,alpha)*coulomb12/2.*
 				       orthbasis_radial(r,base_n)*orthbasis_radial(r,base_m)*
-								 orthbasis_alpha(qs1,lxs,lys,alpha)*orthbasis(qs2,lxs,lys,alpha);
+								 orthbasis_alpha(qs1,lxs,lys,alpha)*orthbasis_alpha(qs2,lxs,lys,alpha);
 #endif
-#ifdef coulomb23
-			base3+=RRM(1,3,q1,lx1,ly1,qs1,lxs)*RRM(3,1,qs2,lxs,lys,q2,lx2)*Vc13(r,alpha)*coulomb23/2.*
+#ifdef coulomb13
+			base3+=RRM(1,3,q1,lx1,ly1,qs1,lxs)*RRM(3,1,qs2,lxs,lys,q2,lx2)*Vc13(r,alpha)*coulomb13/2.*
 				       orthbasis_radial(r,base_n)*orthbasis_radial(r,base_m)*
-								 orthbasis_alpha(qs1,lxs,lys,alpha)*orthbasis(qs2,lxs,lys,alpha);
+								 orthbasis_alpha(qs1,lxs,lys,alpha)*orthbasis_alpha(qs2,lxs,lys,alpha);
 #endif
 
 #ifdef NNOmega

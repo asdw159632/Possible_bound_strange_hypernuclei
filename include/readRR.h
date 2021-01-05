@@ -3,7 +3,7 @@ THnD *RRMTHn;
 const int readRR(int L)
 {
 	char path[100];
-	sprintf(path,"/home/zhangliang/Possible_bound_strange_hypernuclei/RRCoeff/RR_Matrix/RR@{qmax=12,lmax=6,L=%d,%s}.root",L,nuclear);
+	sprintf(path,"/home/zhangliang/Possible_bound_strange_hypernuclei/RRCoeff/RR_Matrix/RR_qmax12_lmax6_L%d_%s.root",L,nuclear);
 	TFile f(path,"read");
 	if(f.IsZombie())
 	{
