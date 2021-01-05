@@ -7,7 +7,7 @@ double C2 = 1438.72*fmmev;
 double mu2 = 3.11;
 
 //The NOmega potential parameter
-double mpi = 146;//use the effective mass as HAL QCD result
+double mpi = 146*fmmev;//use the effective mass as HAL QCD result
 double b[] = {-313.0*fmmev, 81.7, -252*fmmev, 0.85};//choose the parameters of t/a=12
 
 //The Coulomb potential perameter
