@@ -1,4 +1,5 @@
 #include "mass.h"
+#include "blw-para-particle.h"
 
 //H_3, 1 for p, 2 for n, 3 for n
 const double m[3]={mp,mn,mn};
@@ -20,68 +21,26 @@ char nuclear[]="H_3";
 
 #define ABB
 
-#ifdef E200GeV
 //proton
-double Tkin_p1 = 0.1116;//GeV
-double rho_0_p1 = 0.98;
-const int num_p1 = 35;//_arry=40;//int((gRandom->Rndm()-0.5)*10.)+35;//38;//
+double Tkin_p1 = Tkin_nucleon;//GeV
+double rho_0_p1 = rho_0_nucleon;
+const int num_p1 = num_nucleon;//_arry=40;//int((gRandom->Rndm()-0.5)*10.)+35;//38;//
 
 //neutron
-double Tkin_p2 = 0.1116;//GeV
-double rho_0_p2 = 0.98;
-const int num_p2 = 35;//_arry=40;//int((gRandom->Rndm()-0.5)*10.)+38;//
-#elif defined E2_76TeV
-//proton
-double Tkin_p1 = 0.122;//GeV
-double rho_0_p1 = 1.2;
-const int num_p1 = 35;//_arry=40;//int((gRandom->Rndm()-0.5)*10.)+35;//38;//
-
-//neutron
-double Tkin_p2 = 0.122;//GeV
-double rho_0_p2 = 1.2;
-const int num_p2 = 35;//_arry=40;//int((gRandom->Rndm()-0.5)*10.)+38;//
-#endif
-
-/*neutron2
-double Tkin_p3 = 0.1116;//GeV
-double rho_0_p3 = 0.98;
-const int num_p3 = 35;//_arry=40;//int((gRandom->Rndm()-0.5)*10.)+38;*/
+double Tkin_p2 = Tkin_nucleon;//GeV
+double rho_0_p2 = rho_0_nucleon;
+const int num_p2 = num_nucleon;//_arry=40;//int((gRandom->Rndm()-0.5)*10.)+35;//38;//
 
 char ti_p1_pT_Dst[]="proton_pT_Dst";
 char ti_p2_pT_Dst[]="neutron_pT_Dst";
-//char ti_p3_pT_Dst[]="neutron2_pT_Dst";
 
 char ti_func_pT_p1[]="func_pT_proton";
 char ti_func_pT_p2[]="func_pT_neutron";
-//char ti_func_pT_p3[]="func_pT_neutron2";
 
 char ti_func_coordinates_p1[]="func_coordinates_proton";
 char ti_func_coordinates_p2[]="func_coordinates_neutron";
-//char ti_func_coordinates_p3[]="func_coordinates_neutron2";
 
 Double_t GA = 1./4.;
-//GA=(SA*2+1)/((s1*2+1)*...*(sn*2+1))/NI;
-//NI=1;
-//NI counts the iospin state
+//g0=(SA*2+1)/((s1*2+1)*...*(sn*2+1))/NI;
+//NI counts the iospin state; take it as 1 in this case;
 //A. Polleri, R. Mattiello, I.N. Mishustin, J.P. Bondorf, Nucl. Phys. A 661 (1999) 452.
-
-#define H_3
-
-double r12(double r, double alpha)
-{
-	double res=sqrt(Q*(m[0]+m[1])/(m[0]*m[1]))*r*cos(alpha);
-	return res;
-}
-
-double r13(double r, double alpha)
-{
-	double res=sqrt(Q*(m[0]+m[2])/(m[0]*m[2]))*r*cos(alpha);
-	return res;
-}
-
-double r23(double r, double alpha)
-{
-	double res=sqrt(Q*(m[1]+m[2])/(m[1]*m[2]))*r*cos(alpha);
-	return res;
-}
-

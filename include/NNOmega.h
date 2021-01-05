@@ -1,4 +1,5 @@
 #include "mass.h"
+#include "blw_para_particle.h"
 
 //NNOmega, 1 for Omega, 2 for N, 3 for N
 #define NNOmega
@@ -8,15 +9,9 @@
 //#define ppOmega
 
 //Omega
-#ifdef E200GeV
-double Tkin_p1 = 0.1116;//GeV
-double rho_0_p1 = 0.9;
-const int num_p1 = 100;//need to divide 100*1.8
-#elif defined E2_76TeV
-double Tkin_p1 = 0.122;//GeV
-double rho_0_p1 = 1.07;
-const int num_p1 = 100;//need to divide 100*1.9785995
-#endif
+double Tkin_p1 = Tkin_Omega;//GeV
+double rho_0_p1 = rho_0_Omega;
+const int num_p1 = num_Omega;//need to divide 100*1.8
 
 char ti_p1_pT_Dst[]="Omega_pT_Dst";
 char ti_func_pT_p1[]="func_pT_Omega";
@@ -33,27 +28,15 @@ const int two_J=5;
 const int tjkmin=0;
 const int tjkmax=0;
 
-#ifdef E200GeV
 //proton
-double Tkin_p2 = 0.1116;//GeV
-double rho_0_p2 = 0.98;
-const int num_p2 = 17;//_arry=40;//int((gRandom->Rndm()-0.5)*10.)+35;//38;//
+double Tkin_p2 = Tkin_nucleon;//GeV
+double rho_0_p2 = rho_0_nucleon;
+const int num_p2 = num_nucleon;//_arry=40;//int((gRandom->Rndm()-0.5)*10.)+35;//38;//
 
 //neutron
-double Tkin_p3 = 0.1116;//GeV
-double rho_0_p3 = 0.98;
-const int num_p3 = 17;//_arry=40;//int((gRandom->Rndm()-0.5)*10.)+38;//
-#elif defined E2_76TeV
-//proton
-double Tkin_p2 = 0.122;//GeV
-double rho_0_p2 = 1.2;
-const int num_p2 = 35;//_arry=40;//int((gRandom->Rndm()-0.5)*10.)+35;//38;//
-
-//neutron
-double Tkin_p3 = 0.122;//GeV
-double rho_0_p3 = 1.2;
-const int num_p3 = 35;//_arry=40;//int((gRandom->Rndm()-0.5)*10.)+38;//
-#endif
+double Tkin_p3 = Tkin_nucleon;//GeV
+double rho_0_p3 = rho_0_nucleon;
+const int num_p3 = num_nucleon;//_arry=40;//int((gRandom->Rndm()-0.5)*10.)+35;//38;//
 
 char ti_p2_pT_Dst[]="proton_pT_Dst";
 char ti_p3_pT_Dst[]="neutron_pT_Dst";
@@ -81,29 +64,15 @@ const int tjkmin=1;
 const int tjkmax=1;
 
 //neutron
-#ifdef E200GeV
-double Tkin_p2 = 0.1116;//GeV
-double rho_0_p2 = 0.98;
-const int num_p2 = 35;//_arry=40;//int((gRandom->Rndm()-0.5)*10.)+35;//38;//
-#elif defined E2_76TeV
-double Tkin_p2 = 0.122;//GeV
-double rho_0_p2 = 1.2;
-const int num_p2 = 35;//_arry=40;//int((gRandom->Rndm()-0.5)*10.)+35;//38;//
-#endif
-
-/*neutron
-double Tkin_p3 = 0.1116;//GeV
-double rho_0_p3 = 0.98;
-const int num_p3 = 35;//_arry=40;//int((gRandom->Rndm()-0.5)*10.)+38;*/
+double Tkin_p2 = Tkin_nucleon;//GeV
+double rho_0_p2 = rho_0_nucleon;
+const int num_p2 = num_nucleon;//_arry=40;//int((gRandom->Rndm()-0.5)*10.)+35;//38;//
 
 char ti_p2_pT_Dst[]="neutron_pT_Dst";
-//char ti_p3_pT_Dst[]="neutron_pT_Dst";
 
 char ti_func_pT_p2[]="func_pT_neutron";
-//char ti_func_pT_p3[]="func_pT_neutron";
 
 char ti_func_coordinates_p2[]="func_coordinates_neutron";
-//char ti_func_coordinates_p3[]="func_coordinates_neutron";
 
 Double_t GA = 1./4.;
 //GA=(SA*2+1)/((s1*2+1)*...*(sn*2+1))/NI;
@@ -127,29 +96,15 @@ const int tjkmin=1;
 const int tjkmax=1;
 
 //proton
-#ifdef E200GeV
-double Tkin_p2 = 0.1116;//GeV
-double rho_0_p2 = 0.98;
-const int num_p2 = 35;//_arry=40;//int((gRandom->Rndm()-0.5)*10.)+35;//38;//
-#elif defined E2_76TeV
-double Tkin_p2 = 0.122;//GeV
-double rho_0_p2 = 1.2;
-const int num_p2 = 35;//_arry=40;//int((gRandom->Rndm()-0.5)*10.)+35;//38;//
-#endif
-
-/*proton
-double Tkin_p3 = 0.1116;//GeV
-double rho_0_p3 = 0.98;
-const int num_p3 = 35;//_arry=40;//int((gRandom->Rndm()-0.5)*10.)+38;*/
+double Tkin_p2 = Tkin_nucleon;//GeV
+double rho_0_p2 = rho_0_nucleon;
+const int num_p2 = num_nucleon;//_arry=40;//int((gRandom->Rndm()-0.5)*10.)+35;//38;//
 
 char ti_p2_pT_Dst[]="proton_pT_Dst";
-//char ti_p3_pT_Dst[]="proton_pT_Dst";
 
 char ti_func_pT_p2[]="func_pT_proton";
-//char ti_func_pT_p3[]="func_pT_proton";
 
 char ti_func_coordinates_p2[]="func_coordinates_proton";
-//char ti_func_coordinates_p3[]="func_coordinates_proton";
 
 Double_t GA = 1./4.;
 //GA=(SA*2+1)/((s1*2+1)*...*(sn*2+1))/NI;
