@@ -18,6 +18,8 @@ const int two_t3=1;
 const int Ptotal=1;
 const int two_T=0;
 const int two_J=5;
+const int sjkmin=0;
+const int sjkmax=1;
 const int tjkmin=0;
 const int tjkmax=0;
 

@@ -120,7 +120,7 @@ int main()
 			for(int ly=0;ly<=lmax;ly++)
 			{
 				if(pow(-1,lx+ly)!=Ptotal)continue;
-				for(int sjk=0;sjk<=1;sjk++)
+				for(int sjk=sjkmin;sjk<=sjkmax;sjk++)
 				{
 					for(int tjk=tjkmin;tjk<=tjkmax;tjk++)
 					{

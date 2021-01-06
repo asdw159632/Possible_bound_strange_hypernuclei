@@ -1,5 +1,5 @@
 #include "mass.h"
-#include "blw-para-particle.h"
+#include "blw_para_particle.h"
 
 //He_3, 1 for n, 2 for p, 3 for p
 double m[3]={mn,mp,mp};
@@ -13,9 +13,11 @@ const int two_s3=1;
 const int two_t1=1;
 const int two_t2=1;
 const int two_t3=1;
+const int Ptotal=1;
+const int sjkmin=0;
+const int sjkmax=1;
 const int tjkmin=0;
 const int tjkmax=1;
-const int Ptotal=1;
 
 char nuclear[]="He_3";
 

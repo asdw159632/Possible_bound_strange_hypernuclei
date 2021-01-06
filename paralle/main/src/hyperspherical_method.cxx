@@ -64,7 +64,7 @@ double fun_orthbasis(double *x, double *par);*/
 /////////////////////////
 
 //Initialization of variation
-double c0=2000;//c0 is the begin variational parameter of every variational iteration loop
+double c0=3000;//c0 is the begin variational parameter of every variational iteration loop
 double c00=TMath::Power(10,(int) (floor(TMath::Log10(c0))-1));//A parameter which determine the precision/step-size of every variational iteration loop
 #define Ncmax 20/*The span of one variational iteration loop is given by Ncmax*c00. 
 			  It means, in this submit, c varies from c0-c00*(Ncmax/2) to c0+c00*(Ncmax/2)*/
@@ -117,7 +117,7 @@ int main(int argc, char *argv[])
 			for(int ly=0;ly<=lmax;ly++)
 			{
 				if(pow(-1,lx+ly)!=Ptotal)continue;
-				for(int sjk=0;sjk<=1;sjk++)
+				for(int sjk=sjkmin;sjk<=sjkmax;sjk++)
 				{
 					for(int tjk=tjkmin;tjk<=tjkmax;tjk++)
 					{
