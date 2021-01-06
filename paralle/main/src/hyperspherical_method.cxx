@@ -264,16 +264,47 @@ int main(int argc, char *argv[])
 	cout<<endl;
 	cout<<"///////////////////////////////////////////////////////////////"<<endl;
 	
-	char txtsave[100];
-	sprintf(txtsave,"%s/c_%.4f_energy_%.6f.txt",nuclear,c/fmmev,Hmin/fmmev);
-	ofstream f;
-	f.open(txtsave);
-	for(int i=0;i<Hdim;i++){f<<Hmin_Vec[i]<<endl;}
-	f.close();
-
-
 	//HEigen.Delete();
 	//HVa.Print();
+
+
+/////////////////////////////////////////
+//save it into root
+/////////////////////////////////////////
+	TH1D *stateinfo=new TH1D("stateinfo","state infomation",7,0,7);//record state infomation
+	stateinfo->SetXTitle("qmax; lmax; Lmax; anglestate number; nmax; nstart; c");
+	stateinfo->SetBinContent(1,qmax);//qmax;
+	stateinfo->SetBinContent(2,lmax);//lmax;
+	stateinfo->SetBinContent(3,0);//Lmax;
+	stateinfo->SetBinContent(4,aNc);//anglestate number;
+	stateinfo->SetBinContent(5,nmax);//nmax;
+	stateinfo->SetBinContent(6,nstart);//nstart;
+	stateinfo->SetBinContent(7,c/fmmev);//c;
+
+	TH1D *funpar=new TH1D("function_parameter","function_parameter",aNc*nmax,0,1);
+	for(int i=0;i<Hdim;i++)funpar->SetBinContent(i+1,Hmin_Vec[i]);
+
+	TH2I *anglemoment=new TH2I("anglemomentlist","anglemomentlist",aNc,0,1,7,0,7);//x-axis for different state(Nc); y-axis for quantum number;
+	anglemoment->SetXTitle("Nc");
+	anglemoment->SetYTitle("quantum number");
+	for(int iaNc=0;iaNc<aNc;iaNc++)
+	{
+		anglemoment->SetBinContent(iaNc+1,1,anglemomentlist[iaNc][0]);
+		anglemoment->SetBinContent(iaNc+1,2,anglemomentlist[iaNc][1]);
+		anglemoment->SetBinContent(iaNc+1,3,anglemomentlist[iaNc][2]);
+		anglemoment->SetBinContent(iaNc+1,4,anglemomentlist[iaNc][3]);
+		anglemoment->SetBinContent(iaNc+1,5,anglemomentlist[iaNc][4]);
+		anglemoment->SetBinContent(iaNc+1,6,anglemomentlist[iaNc][5]);
+		anglemoment->SetBinContent(iaNc+1,7,anglemomentlist[iaNc][6]);
+	}
+
+	char rootsave[520];
+	sprintf(rootsave,"%s/%s_qmax%d_lmax%d_Lmax0_angnum%d_nmax%d_nstart%d_%.4f_energy%.6f.txt",nuclear,nuclear,qmax,lmax,aNc,nmax,nstart,c/fmmev,Hmin/fmmev);
+	TFile save(rootsave,"recreate");
+	stateinfo->Write();
+	funpar->Write();
+	anglemoment->Write();
+	save.Close();
 
 	return 0;
 }
