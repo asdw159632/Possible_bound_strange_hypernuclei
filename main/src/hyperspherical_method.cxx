@@ -29,6 +29,8 @@ using namespace std;
 #include "../../include/pnOmega.h"
 //#include "../../include/nnOmega.h"
 //#include "../../include/ppOmega.h"
+//#include "../../include/nOmegaOmega.h"
+//#include "../../include/pOmegaOmega.h"
 
 double r23(double r, double alpha);
 double r13(double r, double alpha);
@@ -446,7 +448,7 @@ double integrand_H(double *x, double *Par)
 								 orthbasis_alpha(qs1,lxs,lys,alpha)*orthbasis_alpha(qs2,lxs,lys,alpha);
 #endif
 
-#ifdef NNOmega
+#ifdef two_NOmega_interaction
 			base3+=RRM(1,2,q1,lx1,ly1,qs1,lxs)*RRM(2,1,qs2,lxs,lys,q2,lx2)*V12(2,r,alpha)*
 				       orthbasis_radial(r,base_n)*orthbasis_radial(r,base_m)*
 								 orthbasis_alpha(qs1,lxs,lys,alpha)*orthbasis_alpha(qs2,lxs,lys,alpha);
@@ -471,7 +473,7 @@ double integrand_H(double *x, double *Par)
 			if(lxs+lys<L1 || abs(lxs-lys)>L1 || lxs+lys>K1 || lxs+lys>K2 || (K1-lxs-lys)%2!=0 || (K2-lxs-lys)%2!=0)continue;
 			int qs1=(K1-lxs-lys)/2;
 			int qs2=(K2-lxs-lys)/2;
-#ifdef NNOmega
+#ifdef two_NOmega_interaction
 			if(sjk1!=sjk2)continue;
 			//base4+=RRM(1,3,q1,lx1,ly1,qs1,lxs)*RRM(3,1,qs2,lxs,lys,q2,lx2)*V13(2,r,alpha)*
 			base4+=RRM(1,3,q1,lx1,ly1,qs1,lxs)*RRM(1,3,q2,lx2,ly2,qs2,lxs)*V13(2,r,alpha)*
