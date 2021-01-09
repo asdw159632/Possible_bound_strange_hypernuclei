@@ -5,9 +5,11 @@ using namespace std;
 #define E2_76TeV
 //#define E200GeV
 
-//#include "../../include/H-3.h"
+#include "../../include/H-3.h"
 //#include "../../include/He-3.h"
-#include "../../include/NNOmega.h"
+//#include "../../include/pnOmega.h"
+//#include "../../include/nnOmega.h"
+//#include "../../include/ppOmega.h"
 
 TH3D *rho_density;
 
@@ -51,13 +53,19 @@ int main(int argc, char **argv)
   TList *myList = new TList();
   myList->SetName("myList");
 
-  char *workDir = argv[1];
+	char *workDir=argv[1];
   char *jobID = argv[2];
+  char target[520];
+	sprintf(target,"%s%s",nuclear,argv[3]);
 
   char inRhoDir[512];
-	char *target=argv[3];
   sprintf(inRhoDir,"%s/wigdst/%s.root",workDir,target);
   TFile fin(inRhoDir);
+	if(fin.IsZombie())
+	{
+		cerr<<"Error: file open error, please check exec.sh target";
+		return 0;
+	}
   rho_density = (TH3D *) fin.Get("wigdst");
 
   //init par
@@ -81,7 +89,7 @@ int main(int argc, char **argv)
   
   double dpT = p1_pT_Dst->GetBinWidth(1);
 
-  const int numEvt=10000;
+  const int numEvt=100000;
 
   TLorentzVector mP_p1[num_p1];
   TLorentzVector mR_p1[num_p1];
