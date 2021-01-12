@@ -2,7 +2,7 @@
 #include "blw_para_particle.h"
 
 //NNOmega, 1 for Omega, 2 for N, 3 for N
-#define NNOmega
+#define two_NOmega_interaction
 
 #define ABB
 double m[3]={mOmega,mn,mn};

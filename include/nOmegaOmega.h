@@ -5,6 +5,10 @@
 #define two_NOmega_interaction
 
 #define ABB
+#define NOmegaOmega
+
+#define coulomb23 -1
+
 double m[3]={mn,mOmega,mOmega};
 double M=(m[0]+m[1]+m[2]);
 double Q=1/sqrt(M/(m[0]*m[1]*m[2]));

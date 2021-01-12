@@ -1,7 +1,13 @@
 #include "head.h"
+#define E2_76TeV
+//#define E200GeV
 //#include "../../include/H-3.h"
 //#include "../../include/He-3.h"
-#include "../../include/NNOmega.h"
+//#include "../../include/pnOmega.h"
+//#include "../../include/nnOmega.h"
+//#include "../../include/ppOmega.h"
+#include "../../include/nOmegaOmega.h"
+//#include "../../include/pOmegaOmega.h"
 
 using namespace std;
 
@@ -21,7 +27,7 @@ int main(int argc, char *argv[])
 	const int lmax=6;
 
 	char pathroot[100];
-	sprintf(pathroot,"../RR_Matrix/RR@{qmax=%d,lmax=%d,L=%d,%s}.root",qmax,lmax,L,nuclear);
+	sprintf(pathroot,"../RR_Matrix/RR_qmax%d_lmax%d_L%d_%s.root",qmax,lmax,L,nuclear);
 	TFile RRsaveroot(pathroot,"create");
 	if(RRsaveroot.IsZombie())
 	{

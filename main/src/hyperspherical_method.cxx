@@ -26,11 +26,11 @@ using namespace std;
 //choice a system, choice H_3, He_3 or NNOmega
 //#include "../../include/H-3.h"
 //#include "../../include/He-3.h"
-#include "../../include/pnOmega.h"
+//#include "../../include/pnOmega.h"
 //#include "../../include/nnOmega.h"
 //#include "../../include/ppOmega.h"
 //#include "../../include/nOmegaOmega.h"
-//#include "../../include/pOmegaOmega.h"
+#include "../../include/pOmegaOmega.h"
 
 double r23(double r, double alpha);
 double r13(double r, double alpha);
@@ -339,7 +339,11 @@ double V23(int sjk, double r, double alpha)
 {
 	double V=0;
 	if(sjk==1)V=VNN_01(r23(r,alpha));
+#ifdef NOmegaOmega
+	if(sjk==0)V=VOmegaOmega(r23(r,alpha));
+#else
 	if(sjk==0)V=VNN_10(r23(r,alpha));
+#endif
 	if(sjk==2)V=VNOmega(r23(r,alpha));
 	return V;
 }

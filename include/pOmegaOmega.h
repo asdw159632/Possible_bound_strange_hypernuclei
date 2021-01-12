@@ -5,6 +5,7 @@
 #define two_NOmega_interaction
 
 #define ABB
+#define NOmegaOmega
 
 #define coulomb12 1
 #define coulomb23 -1
@@ -27,7 +28,7 @@ const int sjkmax=0;
 const int tjkmin=0;
 const int tjkmax=0;
 
-char nuclear[]="nOmegaOmega";
+char nuclear[]="pOmegaOmega";
 
 //proton
 double Tkin_p1 = Tkin_nucleon;//GeV

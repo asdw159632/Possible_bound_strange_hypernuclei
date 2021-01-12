@@ -344,7 +344,11 @@ double V23(int sjk, double r, double alpha)
 {
 	double V=0;
 	if(sjk==1)V=VNN_01(r23(r,alpha));
+#ifdef NOmegaOmega
+	if(sjk==0)V=VOmegaOmega(r23(r,alpha));
+#else
 	if(sjk==0)V=VNN_10(r23(r,alpha));
+#endif
 	if(sjk==2)V=VNOmega(r23(r,alpha));
 	return V;
 }
