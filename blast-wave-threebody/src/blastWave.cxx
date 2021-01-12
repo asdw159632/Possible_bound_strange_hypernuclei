@@ -56,7 +56,7 @@ int main(int argc, char **argv)
 	char *workDir=argv[1];
   char *jobID = argv[2];
   char target[520];
-	sprintf(target,"%s%s",nuclear,argv[3]);
+	sprintf(target,"%s_%s",nuclear,argv[3]);
 
   char inRhoDir[512];
   sprintf(inRhoDir,"%s/wigdst/%s.root",workDir,target);
@@ -112,14 +112,14 @@ int main(int argc, char **argv)
   TF1 *func_pT_p1 = new TF1(ti_func_pT_p1,dN_momentum_BLW,0.,5.,3);
   func_pT_p1->SetParameters(m[0]/fmmev/1000/*GeV*/, Tkin_p1,rho_0_p1);
 
-  TF2 *func_coordinates_p1 = new TF2(ti_func_coordinates_p1,dN_coordinates,0,R0, -0.5,0.5, 7);//
+  TF2 *func_coordinates_p1 = new TF2(ti_func_coordinates_p1,dN_coordinates,0,R0, -0.5,0.5, 7);//for 200GeV, eta_s range from -1.5~1.5 is enough
 
   cout<<"func_p1 created!!!"<<endl;
 
   TF1 *func_pT_p2 = new TF1(ti_func_pT_p2,dN_momentum_BLW,0.,5,3);
   func_pT_p2->SetParameters(m[1]/fmmev/1000/*GeV*/, Tkin_p2,rho_0_p2);
 
-  TF2 *func_coordinates_p2 = new TF2(ti_func_coordinates_p2,dN_coordinates,0,R0, -0.5,0.5, 7);//
+  TF2 *func_coordinates_p2 = new TF2(ti_func_coordinates_p2,dN_coordinates,0,R0, -0.5,0.5, 7);//for 200GeV, eta_s range from -1.5~1.5 is enough
 
   cout<<"func_p2 created!!!"<<endl;
 
@@ -127,7 +127,7 @@ int main(int argc, char **argv)
   TF1 *func_pT_p3 = new TF1(ti_func_pT_p3,dN_momentum_BLW,0.,5,3);
   func_pT_p3->SetParameters(m[2]/fmmev/1000/*GeV*/, Tkin_p3,rho_0_p3);
 
-  TF2 *func_coordinates_p3 = new TF2(ti_func_coordinates_p3,dN_coordinates,0,R0, -0.5,0.5, 7);//
+  TF2 *func_coordinates_p3 = new TF2(ti_func_coordinates_p3,dN_coordinates,0,R0, -0.5,0.5, 7);//for 200GeV, eta_s range from -1.5~1.5 is enough
 
   cout<<"func_p3 created!!!"<<endl;
 #endif
