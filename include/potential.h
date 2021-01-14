@@ -11,8 +11,8 @@ double mpi = 146*fmmev;//use the effective mass as HAL QCD result
 double b[] = {-313.0*fmmev, 81.7, -252*fmmev, 0.85};//choose the parameters of t/a=12
 
 //Th3 OmegaOmega potential parameter
-double cj[] = {914, 305, -112};
-double dj[] = {0.143*fmmev, 0.305*fmmev, 0.949*fmmev};
+double cj[] = {914*fmmev, 305*fmmev, -112*fmmev};
+double dj[] = {0.143, 0.305, 0.949};
 
 //The Coulomb potential perameter
 double alpha = 1/137.036;
