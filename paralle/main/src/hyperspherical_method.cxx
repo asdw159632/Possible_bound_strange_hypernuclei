@@ -287,8 +287,12 @@ int main(int argc, char *argv[])
 	for(int i=0;i<Hdim;i++)funpar->SetBinContent(i+1,Hmin_Vec[i]);
 
 	TH1D *eng=new TH1D("binding_energy","binding_energy",1,0,1);
-	eng->SetYTitle("#E_B#/MeV");
+	eng->SetYTitle("E_{B}/MeV");
 	eng->SetBinContent(1,Hmin/fmmev);
+
+	TH1D *englist=new TH1D("state_energy","state_energy",Hdim,0,1);
+	englist->SetYTitle("E_{B}/MeV");
+	for(int i=1;i<=Hdim;i++)englist->SetBinContent(i,HVa(i-1)/fmmev);
 
 	TH2I *anglemoment=new TH2I("anglemomentlist","anglemomentlist",aNc,0,1,7,0,7);//x-axis for different state(Nc); y-axis for quantum number;
 	anglemoment->SetXTitle("Nc");
@@ -310,6 +314,7 @@ int main(int argc, char *argv[])
 	stateinfo->Write();
 	funpar->Write();
 	eng->Write();
+	englist->Write();
 	anglemoment->Write();
 	save.Close();
 
