@@ -414,7 +414,7 @@ void coal_p1p2p3(TLorentzVector *vmP_p1, TLorentzVector *vmR_p1, TLorentzVector 
 #ifdef ABB
 			for(int l=j+1; l<vnum_p3; l++)
 #else
-			for(int l=1; l<vnum_p3; l++)
+			for(int l=0; l<vnum_p3; l++)
 #endif
 			{
 				mP[2] = vmP_p3[l];
