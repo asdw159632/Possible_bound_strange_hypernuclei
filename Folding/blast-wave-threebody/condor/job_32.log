@@ -1,0 +1,261 @@
+000 (28203.032.000) 12/31 10:12:06 Job submitted from host: <172.16.11.200:9618?addrs=172.16.11.200-9618&noUDP&sock=14877_46f2_4>
+...
+001 (28203.032.000) 12/31 10:12:08 Job executing on host: <172.16.11.231:9618?addrs=172.16.11.231-9618&noUDP&sock=startd_22895_f54e_4>
+...
+006 (28203.032.000) 12/31 10:12:17 Image size of job updated: 35184
+	35  -  MemoryUsage of job (MB)
+	35184  -  ResidentSetSize of job (KB)
+...
+006 (28203.032.000) 12/31 10:17:18 Image size of job updated: 35296
+	35  -  MemoryUsage of job (MB)
+	35296  -  ResidentSetSize of job (KB)
+...
+006 (28203.032.000) 12/31 13:14:29 Image size of job updated: 310160
+	35  -  MemoryUsage of job (MB)
+	35296  -  ResidentSetSize of job (KB)
+...
+004 (28203.032.000) 12/31 13:14:29 Job was evicted.
+	(0) CPU times
+		Usr 0 03:02:17, Sys 0 00:00:00  -  Run Remote Usage
+		Usr 0 00:00:00, Sys 0 00:00:00  -  Run Local Usage
+	0  -  Run Bytes Sent By Job
+	0  -  Run Bytes Received By Job
+	Partitionable Resources :    Usage  Request Allocated 
+	   Cpus                 :     1.00        1         1 
+	   Disk (KB)            :     1           1    241059 
+	   Memory (MB)          :    35           1      2008 
+...
+009 (28203.032.000) 12/31 13:14:29 Job was aborted by the user.
+	via condor_rm (by user zhangliang)
+...
+000 (28206.032.000) 12/31 14:09:35 Job submitted from host: <172.16.11.200:9618?addrs=172.16.11.200-9618&noUDP&sock=14877_46f2_4>
+...
+001 (28206.032.000) 12/31 14:19:37 Job executing on host: <172.16.11.231:9618?addrs=172.16.11.231-9618&noUDP&sock=startd_22895_f54e_4>
+...
+006 (28206.032.000) 12/31 14:19:46 Image size of job updated: 34944
+	35  -  MemoryUsage of job (MB)
+	34944  -  ResidentSetSize of job (KB)
+...
+006 (28206.032.000) 01/01 01:30:53 Image size of job updated: 35056
+	35  -  MemoryUsage of job (MB)
+	35056  -  ResidentSetSize of job (KB)
+...
+005 (28206.032.000) 01/01 10:13:36 Job terminated.
+	(1) Normal termination (return value 0)
+		Usr 0 19:53:44, Sys 0 00:00:01  -  Run Remote Usage
+		Usr 0 00:00:00, Sys 0 00:00:00  -  Run Local Usage
+		Usr 0 19:53:44, Sys 0 00:00:01  -  Total Remote Usage
+		Usr 0 00:00:00, Sys 0 00:00:00  -  Total Local Usage
+	0  -  Run Bytes Sent By Job
+	0  -  Run Bytes Received By Job
+	0  -  Total Bytes Sent By Job
+	0  -  Total Bytes Received By Job
+	Partitionable Resources :    Usage  Request Allocated 
+	   Cpus                 :     1.00        1         1 
+	   Disk (KB)            :     1           1    241059 
+	   Memory (MB)          :    35           1      2008 
+...
+000 (28248.032.000) 01/05 15:45:56 Job submitted from host: <172.16.11.200:9618?addrs=172.16.11.200-9618&noUDP&sock=14877_46f2_4>
+...
+001 (28248.032.000) 01/05 16:41:39 Job executing on host: <172.16.11.233:9618?addrs=172.16.11.233-9618&alias=pc-farm3&noUDP&sock=startd_4556_edfa>
+...
+006 (28248.032.000) 01/05 16:41:47 Image size of job updated: 39800
+	39  -  MemoryUsage of job (MB)
+	39800  -  ResidentSetSize of job (KB)
+...
+006 (28248.032.000) 01/05 19:42:06 Image size of job updated: 39804
+	39  -  MemoryUsage of job (MB)
+	39804  -  ResidentSetSize of job (KB)
+...
+006 (28248.032.000) 01/05 19:47:07 Image size of job updated: 39824
+	39  -  MemoryUsage of job (MB)
+	39824  -  ResidentSetSize of job (KB)
+...
+006 (28248.032.000) 01/05 19:52:08 Image size of job updated: 39872
+	39  -  MemoryUsage of job (MB)
+	39872  -  ResidentSetSize of job (KB)
+...
+006 (28248.032.000) 01/05 19:57:08 Image size of job updated: 40008
+	40  -  MemoryUsage of job (MB)
+	40008  -  ResidentSetSize of job (KB)
+...
+006 (28248.032.000) 01/05 20:02:08 Image size of job updated: 40036
+	40  -  MemoryUsage of job (MB)
+	40036  -  ResidentSetSize of job (KB)
+...
+006 (28248.032.000) 01/05 20:37:12 Image size of job updated: 40052
+	40  -  MemoryUsage of job (MB)
+	40052  -  ResidentSetSize of job (KB)
+...
+006 (28248.032.000) 01/05 20:42:12 Image size of job updated: 40076
+	40  -  MemoryUsage of job (MB)
+	40076  -  ResidentSetSize of job (KB)
+...
+006 (28248.032.000) 01/05 20:47:12 Image size of job updated: 40096
+	40  -  MemoryUsage of job (MB)
+	40096  -  ResidentSetSize of job (KB)
+...
+006 (28248.032.000) 01/05 20:52:13 Image size of job updated: 40240
+	40  -  MemoryUsage of job (MB)
+	40240  -  ResidentSetSize of job (KB)
+...
+006 (28248.032.000) 01/05 20:57:14 Image size of job updated: 40292
+	40  -  MemoryUsage of job (MB)
+	40292  -  ResidentSetSize of job (KB)
+...
+006 (28248.032.000) 01/05 21:07:15 Image size of job updated: 40336
+	40  -  MemoryUsage of job (MB)
+	40336  -  ResidentSetSize of job (KB)
+...
+006 (28248.032.000) 01/05 21:12:16 Image size of job updated: 40356
+	40  -  MemoryUsage of job (MB)
+	40356  -  ResidentSetSize of job (KB)
+...
+006 (28248.032.000) 01/05 21:17:16 Image size of job updated: 40368
+	40  -  MemoryUsage of job (MB)
+	40368  -  ResidentSetSize of job (KB)
+...
+006 (28248.032.000) 01/05 21:22:16 Image size of job updated: 40392
+	40  -  MemoryUsage of job (MB)
+	40392  -  ResidentSetSize of job (KB)
+...
+006 (28248.032.000) 01/05 21:37:17 Image size of job updated: 40460
+	40  -  MemoryUsage of job (MB)
+	40460  -  ResidentSetSize of job (KB)
+...
+006 (28248.032.000) 01/05 21:42:19 Image size of job updated: 40484
+	40  -  MemoryUsage of job (MB)
+	40484  -  ResidentSetSize of job (KB)
+...
+006 (28248.032.000) 01/05 21:47:19 Image size of job updated: 40508
+	40  -  MemoryUsage of job (MB)
+	40508  -  ResidentSetSize of job (KB)
+...
+006 (28248.032.000) 01/05 21:57:20 Image size of job updated: 40532
+	40  -  MemoryUsage of job (MB)
+	40532  -  ResidentSetSize of job (KB)
+...
+006 (28248.032.000) 01/05 22:02:21 Image size of job updated: 40628
+	40  -  MemoryUsage of job (MB)
+	40628  -  ResidentSetSize of job (KB)
+...
+006 (28248.032.000) 01/05 22:17:23 Image size of job updated: 40760
+	40  -  MemoryUsage of job (MB)
+	40760  -  ResidentSetSize of job (KB)
+...
+006 (28248.032.000) 01/05 22:22:23 Image size of job updated: 40788
+	40  -  MemoryUsage of job (MB)
+	40788  -  ResidentSetSize of job (KB)
+...
+006 (28248.032.000) 01/05 22:27:23 Image size of job updated: 40796
+	40  -  MemoryUsage of job (MB)
+	40796  -  ResidentSetSize of job (KB)
+...
+006 (28248.032.000) 01/05 22:42:25 Image size of job updated: 40876
+	40  -  MemoryUsage of job (MB)
+	40876  -  ResidentSetSize of job (KB)
+...
+006 (28248.032.000) 01/05 22:52:27 Image size of job updated: 40960
+	40  -  MemoryUsage of job (MB)
+	40960  -  ResidentSetSize of job (KB)
+...
+006 (28248.032.000) 01/05 22:57:27 Image size of job updated: 40984
+	41  -  MemoryUsage of job (MB)
+	40984  -  ResidentSetSize of job (KB)
+...
+006 (28248.032.000) 01/05 23:02:28 Image size of job updated: 41012
+	41  -  MemoryUsage of job (MB)
+	41012  -  ResidentSetSize of job (KB)
+...
+006 (28248.032.000) 01/05 23:12:29 Image size of job updated: 41068
+	41  -  MemoryUsage of job (MB)
+	41068  -  ResidentSetSize of job (KB)
+...
+006 (28248.032.000) 01/05 23:17:29 Image size of job updated: 41076
+	41  -  MemoryUsage of job (MB)
+	41076  -  ResidentSetSize of job (KB)
+...
+006 (28248.032.000) 01/05 23:22:30 Image size of job updated: 41112
+	41  -  MemoryUsage of job (MB)
+	41112  -  ResidentSetSize of job (KB)
+...
+006 (28248.032.000) 01/05 23:32:30 Image size of job updated: 41152
+	41  -  MemoryUsage of job (MB)
+	41152  -  ResidentSetSize of job (KB)
+...
+006 (28248.032.000) 01/05 23:47:32 Image size of job updated: 41244
+	41  -  MemoryUsage of job (MB)
+	41244  -  ResidentSetSize of job (KB)
+...
+006 (28248.032.000) 01/06 00:12:36 Image size of job updated: 41300
+	41  -  MemoryUsage of job (MB)
+	41300  -  ResidentSetSize of job (KB)
+...
+006 (28248.032.000) 01/06 00:47:40 Image size of job updated: 41352
+	41  -  MemoryUsage of job (MB)
+	41352  -  ResidentSetSize of job (KB)
+...
+006 (28248.032.000) 01/06 00:52:41 Image size of job updated: 41372
+	41  -  MemoryUsage of job (MB)
+	41372  -  ResidentSetSize of job (KB)
+...
+006 (28248.032.000) 01/06 00:57:41 Image size of job updated: 41396
+	41  -  MemoryUsage of job (MB)
+	41396  -  ResidentSetSize of job (KB)
+...
+006 (28248.032.000) 01/06 01:02:41 Image size of job updated: 41416
+	41  -  MemoryUsage of job (MB)
+	41416  -  ResidentSetSize of job (KB)
+...
+006 (28248.032.000) 01/06 01:07:43 Image size of job updated: 41436
+	41  -  MemoryUsage of job (MB)
+	41436  -  ResidentSetSize of job (KB)
+...
+006 (28248.032.000) 01/06 01:12:43 Image size of job updated: 41456
+	41  -  MemoryUsage of job (MB)
+	41456  -  ResidentSetSize of job (KB)
+...
+006 (28248.032.000) 01/06 01:17:43 Image size of job updated: 41604
+	41  -  MemoryUsage of job (MB)
+	41604  -  ResidentSetSize of job (KB)
+...
+006 (28248.032.000) 01/06 01:47:47 Image size of job updated: 41636
+	41  -  MemoryUsage of job (MB)
+	41636  -  ResidentSetSize of job (KB)
+...
+006 (28248.032.000) 01/06 01:52:47 Image size of job updated: 41656
+	41  -  MemoryUsage of job (MB)
+	41656  -  ResidentSetSize of job (KB)
+...
+006 (28248.032.000) 01/06 01:57:48 Image size of job updated: 41676
+	41  -  MemoryUsage of job (MB)
+	41676  -  ResidentSetSize of job (KB)
+...
+006 (28248.032.000) 01/06 02:02:48 Image size of job updated: 41696
+	41  -  MemoryUsage of job (MB)
+	41696  -  ResidentSetSize of job (KB)
+...
+006 (28248.032.000) 01/06 02:07:48 Image size of job updated: 41716
+	41  -  MemoryUsage of job (MB)
+	41716  -  ResidentSetSize of job (KB)
+...
+005 (28248.032.000) 01/06 02:08:43 Job terminated.
+	(1) Normal termination (return value 0)
+		Usr 0 08:28:25, Sys 0 00:00:04  -  Run Remote Usage
+		Usr 0 00:00:00, Sys 0 00:00:00  -  Run Local Usage
+		Usr 0 08:28:25, Sys 0 00:00:04  -  Total Remote Usage
+		Usr 0 00:00:00, Sys 0 00:00:00  -  Total Local Usage
+	0  -  Run Bytes Sent By Job
+	0  -  Run Bytes Received By Job
+	0  -  Total Bytes Sent By Job
+	0  -  Total Bytes Received By Job
+	Partitionable Resources :    Usage  Request Allocated 
+	   Cpus                 :     0.96        1         1 
+	   Disk (KB)            :     1           1    254050 
+	   Memory (MB)          :    41           1      1005 
+...
+000 (28271.032.000) 01/06 15:26:51 Job submitted from host: <172.16.11.200:9618?addrs=172.16.11.200-9618&noUDP&sock=14877_46f2_4>
+...
+009 (28271.032.000) 01/06 15:47:45 Job was aborted by the user.
+	via condor_rm (by user zhangliang)
+...

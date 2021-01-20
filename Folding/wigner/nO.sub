@@ -1,0 +1,11 @@
+Universe = vanilla
+Notification = Error
+Initialdir = .
+Arguments = $(Process)
+Executable = nO.sh
+Output = ./condor/job_nO_$(Process).out
+Error = ./condor/job_nO_$(Process).err
+Log = ./condor/job_nO_$(Process).log
+Notify_user = zhangliang15@lzu.edu.cn
+getenv = true
+queue 24
