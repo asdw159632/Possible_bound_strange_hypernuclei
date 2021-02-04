@@ -1,0 +1,58 @@
+000 (29177.013.000) 01/16 16:02:07 Job submitted from host: <172.16.11.200:9618?addrs=172.16.11.200-9618&noUDP&sock=14877_46f2_4>
+...
+001 (29177.013.000) 01/16 16:09:29 Job executing on host: <172.16.11.234:9618?addrs=172.16.11.234-9618&alias=pc-farm4&noUDP&sock=startd_5195_3aff>
+...
+006 (29177.013.000) 01/16 16:09:38 Image size of job updated: 33660
+	33  -  MemoryUsage of job (MB)
+	33660  -  ResidentSetSize of job (KB)
+...
+006 (29177.013.000) 01/16 16:14:39 Image size of job updated: 421952
+	33  -  MemoryUsage of job (MB)
+	33660  -  ResidentSetSize of job (KB)
+...
+006 (29177.013.000) 01/16 16:19:40 Image size of job updated: 421960
+	33  -  MemoryUsage of job (MB)
+	33664  -  ResidentSetSize of job (KB)
+...
+005 (29177.013.000) 01/16 17:47:24 Job terminated.
+	(1) Normal termination (return value 0)
+		Usr 0 01:31:27, Sys 0 00:00:01  -  Run Remote Usage
+		Usr 0 00:00:00, Sys 0 00:00:00  -  Run Local Usage
+		Usr 0 01:31:27, Sys 0 00:00:01  -  Total Remote Usage
+		Usr 0 00:00:00, Sys 0 00:00:00  -  Total Local Usage
+	0  -  Run Bytes Sent By Job
+	0  -  Run Bytes Received By Job
+	0  -  Total Bytes Sent By Job
+	0  -  Total Bytes Received By Job
+	Partitionable Resources :    Usage  Request Allocated 
+	   Cpus                 :     0.91        1         1 
+	   Disk (KB)            :     1           1    255907 
+	   Memory (MB)          :    33           1       999 
+...
+000 (29686.013.000) 01/30 12:02:43 Job submitted from host: <172.16.11.200:9618?addrs=172.16.11.200-9618&noUDP&sock=14877_46f2_4>
+...
+001 (29686.013.000) 01/30 13:50:46 Job executing on host: <172.16.11.234:9618?addrs=172.16.11.234-9618&alias=pc-farm4&noUDP&sock=startd_5195_3aff>
+...
+006 (29686.013.000) 01/30 13:50:55 Image size of job updated: 421956
+	33  -  MemoryUsage of job (MB)
+	33656  -  ResidentSetSize of job (KB)
+...
+006 (29686.013.000) 01/30 14:00:56 Image size of job updated: 421964
+	33  -  MemoryUsage of job (MB)
+	33660  -  ResidentSetSize of job (KB)
+...
+005 (29686.013.000) 01/30 15:10:35 Job terminated.
+	(1) Normal termination (return value 0)
+		Usr 0 01:19:47, Sys 0 00:00:00  -  Run Remote Usage
+		Usr 0 00:00:00, Sys 0 00:00:00  -  Run Local Usage
+		Usr 0 01:19:47, Sys 0 00:00:00  -  Total Remote Usage
+		Usr 0 00:00:00, Sys 0 00:00:00  -  Total Local Usage
+	0  -  Run Bytes Sent By Job
+	0  -  Run Bytes Received By Job
+	0  -  Total Bytes Sent By Job
+	0  -  Total Bytes Received By Job
+	Partitionable Resources :    Usage  Request Allocated 
+	   Cpus                 :     1.00        1         1 
+	   Disk (KB)            :     1           1    255907 
+	   Memory (MB)          :    33           1       999 
+...

@@ -15,8 +15,8 @@ TOP     := $(shell pwd)/
 OBJ     := $(TOP)obj/
 BIN     := $(TOP)bin/
 LIB     := lib/
-MYLIB   := ../mylib/*.o
-MYINC		:= ../myinc
+MYLIB   := $(HOME)/mylib/*.o
+MYINC		:= $(HOME)/myinc
 SRC     := $(TOP)src/
 MAIN    := $(TOP)main/
 INC     := $(TOP)src/
@@ -54,7 +54,7 @@ vpath %.o   $(BIN)
 #	
 
 CPP     = g++
-CPPFLAGS = -O -Wall -fPIC -I $(ROOTINC) -I$(INC) -I$(MYINC) -Wno-deprecated
+CPPFLAGS = -fopenmp -std=c++11 -O3 -Wall -fPIC -I $(ROOTINC) -I$(INC) -I$(MYINC) -Wno-deprecated
 CC      = gcc
 ifeq ($(OPT),TRUE)	
 #CPPFLAGS += -g 

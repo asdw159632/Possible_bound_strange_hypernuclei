@@ -20,24 +20,7 @@ void addall()
 	if(scale==1)
 	{
 		aBorhr=1;
-		rmin=-8;
-		rmax=2;
-		dr=(rmax-rmin)/Nr;
-
 		ku=1/aBorhr/fmmev;
-		pmin=-8;
-		pmax=1;
-		dp=(pmax-pmin)/Np;
-	}
-	else
-	{
-		rmin=0;//fm
-		rmax=10;//fm
-		dr=(rmax-rmin)/Nr;//fm
-
-		pmin=0;//MeV
-		pmax=1000;//MeV
-		dp=(pmax-pmin)/Np;//MeV
 	}
 
 	const int Ntheta=24;
@@ -57,10 +40,29 @@ void addall()
 	}else{
 		sprintf(savepath,"%s.root",workdir);
 	}
+
+	char readpath0[520];
+	if(scale==1)
+	{
+		sprintf(readpath0,"%s/%s_thetal_0-scaled.root",workdir,workdir);
+	}else{
+		sprintf(readpath0,"%s/%s_thetal_0.root",workdir,workdir);
+	}
+	TFile read0(readpath0,"read");
+	TH2D *readth0=(TH2D*)read0.Get("wigdst");
+	rmin=readth0->GetXaxis()->GetBinLowEdge(readth0->GetXaxis()->GetFirst());
+	rmax=readth0->GetXaxis()->GetBinUpEdge(readth0->GetXaxis()->GetLast());
+	dr=readth0->GetXaxis()->GetBinWidth(1);
+
+	pmin=readth0->GetYaxis()->GetBinLowEdge(readth0->GetYaxis()->GetFirst());
+	pmax=readth0->GetYaxis()->GetBinUpEdge(readth0->GetYaxis()->GetLast());
+	dp=readth0->GetYaxis()->GetBinWidth(1);
+	read0.Close();
+
 	TH3D *wigdst=new TH3D("wigdst","wigdst",Nr,rmin,rmax,Np,pmin,pmax,Ntheta,thetamin,thetamax);
 	
 	int process=0;
-	for(int l=1;l<=Ntheta;l++)
+	for(int l=0;l<Ntheta;l++)
 	{
 		if(process<(l*10/Ntheta))
 		{
@@ -74,16 +76,14 @@ void addall()
 		}else{
 			sprintf(readpath,"%s/%s_thetal_%d.root",workdir,workdir,l);
 		}
-		char wigname[100];
-		sprintf(wigname,"wigdst_thetal_%d",l);
 		TFile read(readpath,"read");
-		TH2D *readth=(TH2D*)read.Get(wigname);
+		TH2D *readth=(TH2D*)read.Get("wigdst");
 		for(int i=1;i<=Nr;i++)
 		{
 			for(int j=1;j<=Np;j++)
 			{
 				double dst=readth->GetBinContent(i,j);
-				wigdst->SetBinContent(i,j,l,dst);
+				wigdst->SetBinContent(i,j,l+1,dst);
 			}
 		}
 		read.Close();

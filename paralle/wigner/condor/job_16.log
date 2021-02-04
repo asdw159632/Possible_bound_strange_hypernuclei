@@ -1,150 +1,71 @@
-000 (1673153.016.000) 12/22 17:02:58 Job submitted from host: <172.16.2.141:36601>
+000 (29173.016.000) 01/16 14:05:44 Job submitted from host: <172.16.11.200:9618?addrs=172.16.11.200-9618&noUDP&sock=14877_46f2_4>
 ...
-001 (1673153.016.000) 12/22 17:03:02 Job executing on host: <172.16.2.151:35010>
+000 (29174.016.000) 01/16 14:05:47 Job submitted from host: <172.16.11.200:9618?addrs=172.16.11.200-9618&noUDP&sock=14877_46f2_4>
 ...
-007 (1673153.016.000) 12/22 17:03:02 Shadow exception!
-	Error from slot17@A151: Failed to execute '/home/zhangliang/Possible_bound_strange_hypernuclei/parallewigner/test.sh' with arguments 16: (errno=13: 'Permission denied')
+000 (29175.016.000) 01/16 14:05:50 Job submitted from host: <172.16.11.200:9618?addrs=172.16.11.200-9618&noUDP&sock=14877_46f2_4>
+...
+001 (29173.016.000) 01/16 14:20:05 Job executing on host: <172.16.11.231:9618?addrs=172.16.11.231-9618&noUDP&sock=startd_22895_f54e_4>
+...
+006 (29173.016.000) 01/16 14:20:13 Image size of job updated: 34020
+	34  -  MemoryUsage of job (MB)
+	34020  -  ResidentSetSize of job (KB)
+...
+001 (29174.016.000) 01/16 14:46:07 Job executing on host: <172.16.11.234:9618?addrs=172.16.11.234-9618&alias=pc-farm4&noUDP&sock=startd_5195_3aff>
+...
+006 (29174.016.000) 01/16 14:46:15 Image size of job updated: 421952
+	33  -  MemoryUsage of job (MB)
+	33656  -  ResidentSetSize of job (KB)
+...
+001 (29175.016.000) 01/16 14:53:33 Job executing on host: <172.16.11.232:9618?addrs=172.16.11.232-9618&alias=pc-farm2&noUDP&sock=startd_4986_dfb4_4>
+...
+006 (29175.016.000) 01/16 14:53:34 Image size of job updated: 1
+	0  -  MemoryUsage of job (MB)
+	0  -  ResidentSetSize of job (KB)
+...
+005 (29175.016.000) 01/16 14:53:34 Job terminated.
+	(1) Normal termination (return value 0)
+		Usr 0 00:00:00, Sys 0 00:00:00  -  Run Remote Usage
+		Usr 0 00:00:00, Sys 0 00:00:00  -  Run Local Usage
+		Usr 0 00:00:00, Sys 0 00:00:00  -  Total Remote Usage
+		Usr 0 00:00:00, Sys 0 00:00:00  -  Total Local Usage
 	0  -  Run Bytes Sent By Job
 	0  -  Run Bytes Received By Job
+	0  -  Total Bytes Sent By Job
+	0  -  Total Bytes Received By Job
+	Partitionable Resources :    Usage  Request Allocated 
+	   Cpus                 :        0        1         1 
+	   Disk (KB)            :        1        1    245927 
+	   Memory (MB)          :        0        1      1005 
 ...
-012 (1673153.016.000) 12/22 17:03:03 Job was held.
-	Error from slot17@A151: Failed to execute '/home/zhangliang/Possible_bound_strange_hypernuclei/parallewigner/test.sh' with arguments 16: (errno=13: 'Permission denied')
-	Code 6 Subcode 13
+006 (29174.016.000) 01/16 14:56:16 Image size of job updated: 421960
+	33  -  MemoryUsage of job (MB)
+	33660  -  ResidentSetSize of job (KB)
 ...
-009 (1673153.016.000) 12/22 17:05:12 Job was aborted by the user.
+004 (29173.016.000) 01/16 15:43:10 Job was evicted.
+	(0) CPU times
+		Usr 0 01:18:26, Sys 0 00:00:00  -  Run Remote Usage
+		Usr 0 00:00:00, Sys 0 00:00:00  -  Run Local Usage
+	0  -  Run Bytes Sent By Job
+	0  -  Run Bytes Received By Job
+	Partitionable Resources :    Usage  Request Allocated 
+	   Cpus                 :     0.92        1         1 
+	   Disk (KB)            :     1           1    241059 
+	   Memory (MB)          :    34           1      2008 
+...
+009 (29173.016.000) 01/16 15:43:10 Job was aborted by the user.
 	via condor_rm (by user zhangliang)
 ...
-000 (1673154.016.000) 12/22 17:10:32 Job submitted from host: <172.16.2.141:36601>
-...
-001 (1673154.016.000) 12/22 17:10:35 Job executing on host: <172.16.2.151:35010>
-...
-006 (1673154.016.000) 12/22 17:10:43 Image size of job updated: 256812
-	29  -  MemoryUsage of job (MB)
-	29600  -  ResidentSetSize of job (KB)
-...
-006 (1673154.016.000) 12/22 17:15:44 Image size of job updated: 256880
-	38  -  MemoryUsage of job (MB)
-	38636  -  ResidentSetSize of job (KB)
-...
-005 (1673154.016.000) 12/22 17:22:43 Job terminated.
-	(1) Normal termination (return value 0)
-		Usr 0 00:12:05, Sys 0 00:00:00  -  Run Remote Usage
-		Usr 0 00:00:00, Sys 0 00:00:00  -  Run Local Usage
-		Usr 0 00:12:05, Sys 0 00:00:00  -  Total Remote Usage
-		Usr 0 00:00:00, Sys 0 00:00:00  -  Total Local Usage
-	0  -  Run Bytes Sent By Job
-	0  -  Run Bytes Received By Job
-	0  -  Total Bytes Sent By Job
-	0  -  Total Bytes Received By Job
-	Partitionable Resources :    Usage  Request Allocated
-	   Cpus                 :                 1         1
-	   Disk (KB)            :        1        1   1084963
-	   Memory (MB)          :       38        1     12107
-...
-000 (1673179.016.000) 12/24 15:12:06 Job submitted from host: <172.16.2.141:36601>
-...
-001 (1673179.016.000) 12/24 15:12:26 Job executing on host: <172.16.2.141:56348>
-...
-006 (1673179.016.000) 12/24 15:12:35 Image size of job updated: 242440
-	28  -  MemoryUsage of job (MB)
-	28068  -  ResidentSetSize of job (KB)
-...
-006 (1673179.016.000) 12/24 15:17:35 Image size of job updated: 242444
-	28  -  MemoryUsage of job (MB)
-	28132  -  ResidentSetSize of job (KB)
-...
-006 (1673179.016.000) 12/24 15:27:36 Image size of job updated: 242444
-	28  -  MemoryUsage of job (MB)
-	28320  -  ResidentSetSize of job (KB)
-...
-005 (1673179.016.000) 12/24 15:27:47 Job terminated.
-	(1) Normal termination (return value 0)
-		Usr 0 00:15:14, Sys 0 00:00:00  -  Run Remote Usage
-		Usr 0 00:00:00, Sys 0 00:00:00  -  Run Local Usage
-		Usr 0 00:15:14, Sys 0 00:00:00  -  Total Remote Usage
-		Usr 0 00:00:00, Sys 0 00:00:00  -  Total Local Usage
-	0  -  Run Bytes Sent By Job
-	0  -  Run Bytes Received By Job
-	0  -  Total Bytes Sent By Job
-	0  -  Total Bytes Received By Job
-	Partitionable Resources :    Usage  Request Allocated
-	   Cpus                 :                 1         1
-	   Disk (KB)            :        1        1  18596035
-	   Memory (MB)          :       28        1      2676
-...
-000 (1673182.016.000) 12/24 20:39:03 Job submitted from host: <172.16.2.141:36601>
-...
-001 (1673182.016.000) 12/24 20:44:07 Job executing on host: <172.16.2.151:35010>
-...
-006 (1673182.016.000) 12/24 20:44:16 Image size of job updated: 255880
-	30  -  MemoryUsage of job (MB)
-	30076  -  ResidentSetSize of job (KB)
-...
-006 (1673182.016.000) 12/24 20:49:16 Image size of job updated: 256904
-	38  -  MemoryUsage of job (MB)
-	38276  -  ResidentSetSize of job (KB)
-...
-005 (1673182.016.000) 12/24 20:57:33 Job terminated.
-	(1) Normal termination (return value 0)
-		Usr 0 00:13:16, Sys 0 00:00:00  -  Run Remote Usage
-		Usr 0 00:00:00, Sys 0 00:00:00  -  Run Local Usage
-		Usr 0 00:13:16, Sys 0 00:00:00  -  Total Remote Usage
-		Usr 0 00:00:00, Sys 0 00:00:00  -  Total Local Usage
-	0  -  Run Bytes Sent By Job
-	0  -  Run Bytes Received By Job
-	0  -  Total Bytes Sent By Job
-	0  -  Total Bytes Received By Job
-	Partitionable Resources :    Usage  Request Allocated
-	   Cpus                 :                 1         1
-	   Disk (KB)            :        1        1   1084981
-	   Memory (MB)          :       38        1     12107
-...
-000 (1673190.016.000) 12/25 19:55:10 Job submitted from host: <172.16.2.141:36601>
-...
-001 (1673190.016.000) 12/25 19:55:13 Job executing on host: <172.16.2.141:56348>
-...
-006 (1673190.016.000) 12/25 19:55:22 Image size of job updated: 242452
-	28  -  MemoryUsage of job (MB)
-	28236  -  ResidentSetSize of job (KB)
-...
-004 (1673190.016.000) 12/25 19:55:45 Job was evicted.
-	(0) Job was not checkpointed.
-		Usr 0 00:00:31, Sys 0 00:00:00  -  Run Remote Usage
+004 (29174.016.000) 01/16 15:43:12 Job was evicted.
+	(0) CPU times
+		Usr 0 00:52:20, Sys 0 00:00:00  -  Run Remote Usage
 		Usr 0 00:00:00, Sys 0 00:00:00  -  Run Local Usage
 	0  -  Run Bytes Sent By Job
 	0  -  Run Bytes Received By Job
-	Partitionable Resources :    Usage  Request Allocated
-	   Cpus                 :                 1         1
-	   Disk (KB)            :        1        1  18595773
-	   Memory (MB)          :       28        1      2676
+	Partitionable Resources :    Usage  Request Allocated 
+	   Cpus                 :     0.92        1         1 
+	   Disk (KB)            :     1           1    255907 
+	   Memory (MB)          :    33           1       999 
 ...
-009 (1673190.016.000) 12/25 19:55:47 Job was aborted by the user.
+009 (29174.016.000) 01/16 15:43:12 Job was aborted by the user.
 	via condor_rm (by user zhangliang)
-...
-000 (1673191.016.000) 12/25 19:58:56 Job submitted from host: <172.16.2.141:36601>
-...
-001 (1673191.016.000) 12/25 19:58:59 Job executing on host: <172.16.2.141:56348>
-...
-006 (1673191.016.000) 12/25 19:59:08 Image size of job updated: 242452
-	29  -  MemoryUsage of job (MB)
-	29644  -  ResidentSetSize of job (KB)
-...
-006 (1673191.016.000) 12/25 20:04:08 Image size of job updated: 242456
-	30  -  MemoryUsage of job (MB)
-	29716  -  ResidentSetSize of job (KB)
-...
-005 (1673191.016.000) 12/25 20:17:46 Job terminated.
-	(1) Normal termination (return value 0)
-		Usr 0 00:18:44, Sys 0 00:00:00  -  Run Remote Usage
-		Usr 0 00:00:00, Sys 0 00:00:00  -  Run Local Usage
-		Usr 0 00:18:44, Sys 0 00:00:00  -  Total Remote Usage
-		Usr 0 00:00:00, Sys 0 00:00:00  -  Total Local Usage
-	0  -  Run Bytes Sent By Job
-	0  -  Run Bytes Received By Job
-	0  -  Total Bytes Sent By Job
-	0  -  Total Bytes Received By Job
-	Partitionable Resources :    Usage  Request Allocated
-	   Cpus                 :                 1         1
-	   Disk (KB)            :        1        1  18595832
-	   Memory (MB)          :       30        1      2676
 ...

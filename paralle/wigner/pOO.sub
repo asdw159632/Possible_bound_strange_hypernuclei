@@ -1,0 +1,11 @@
+Universe = vanilla
+Notification = Error
+Initialdir = .
+Arguments = $(Process)
+Executable = exec-pOO.sh
+Output = ./condor/job_pOO_$(Process).out
+Error = ./condor/job_pOO_$(Process).err
+Log = ./condor/job_pOO_$(Process).log
+Notify_user = zhangliang@sinap.ac.cn
+getenv = true
+queue 24

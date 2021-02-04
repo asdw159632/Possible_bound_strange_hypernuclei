@@ -1,0 +1,98 @@
+000 (29177.020.000) 01/16 16:02:07 Job submitted from host: <172.16.11.200:9618?addrs=172.16.11.200-9618&noUDP&sock=14877_46f2_4>
+...
+001 (29177.020.000) 01/16 16:13:30 Job executing on host: <172.16.11.232:9618?addrs=172.16.11.232-9618&alias=pc-farm2&noUDP&sock=startd_4986_dfb4_4>
+...
+006 (29177.020.000) 01/16 16:13:38 Image size of job updated: 33384
+	33  -  MemoryUsage of job (MB)
+	33384  -  ResidentSetSize of job (KB)
+...
+005 (29177.020.000) 01/16 17:46:15 Job terminated.
+	(1) Normal termination (return value 0)
+		Usr 0 01:31:30, Sys 0 00:00:00  -  Run Remote Usage
+		Usr 0 00:00:00, Sys 0 00:00:00  -  Run Local Usage
+		Usr 0 01:31:30, Sys 0 00:00:00  -  Total Remote Usage
+		Usr 0 00:00:00, Sys 0 00:00:00  -  Total Local Usage
+	0  -  Run Bytes Sent By Job
+	0  -  Run Bytes Received By Job
+	0  -  Total Bytes Sent By Job
+	0  -  Total Bytes Received By Job
+	Partitionable Resources :    Usage  Request Allocated 
+	   Cpus                 :     1.00        1         1 
+	   Disk (KB)            :     1           1    245927 
+	   Memory (MB)          :    33           1      1005 
+...
+000 (29686.020.000) 01/30 12:02:43 Job submitted from host: <172.16.11.200:9618?addrs=172.16.11.200-9618&noUDP&sock=14877_46f2_4>
+...
+001 (29686.020.000) 01/30 13:51:46 Job executing on host: <172.16.11.233:9618?addrs=172.16.11.233-9618&alias=pc-farm3&noUDP&sock=startd_4556_edfa>
+...
+006 (29686.020.000) 01/30 13:51:55 Image size of job updated: 35820
+	35  -  MemoryUsage of job (MB)
+	35820  -  ResidentSetSize of job (KB)
+...
+006 (29686.020.000) 01/30 13:56:55 Image size of job updated: 35832
+	35  -  MemoryUsage of job (MB)
+	35832  -  ResidentSetSize of job (KB)
+...
+006 (29686.020.000) 01/30 14:01:56 Image size of job updated: 35860
+	36  -  MemoryUsage of job (MB)
+	35860  -  ResidentSetSize of job (KB)
+...
+006 (29686.020.000) 01/30 14:06:57 Image size of job updated: 35876
+	36  -  MemoryUsage of job (MB)
+	35876  -  ResidentSetSize of job (KB)
+...
+006 (29686.020.000) 01/30 14:11:57 Image size of job updated: 35888
+	36  -  MemoryUsage of job (MB)
+	35888  -  ResidentSetSize of job (KB)
+...
+006 (29686.020.000) 01/30 14:16:57 Image size of job updated: 35904
+	36  -  MemoryUsage of job (MB)
+	35904  -  ResidentSetSize of job (KB)
+...
+006 (29686.020.000) 01/30 14:21:58 Image size of job updated: 35920
+	36  -  MemoryUsage of job (MB)
+	35920  -  ResidentSetSize of job (KB)
+...
+006 (29686.020.000) 01/30 14:26:59 Image size of job updated: 35932
+	36  -  MemoryUsage of job (MB)
+	35932  -  ResidentSetSize of job (KB)
+...
+006 (29686.020.000) 01/30 14:31:59 Image size of job updated: 35948
+	36  -  MemoryUsage of job (MB)
+	35948  -  ResidentSetSize of job (KB)
+...
+006 (29686.020.000) 01/30 14:37:00 Image size of job updated: 35960
+	36  -  MemoryUsage of job (MB)
+	35960  -  ResidentSetSize of job (KB)
+...
+006 (29686.020.000) 01/30 14:42:01 Image size of job updated: 35976
+	36  -  MemoryUsage of job (MB)
+	35976  -  ResidentSetSize of job (KB)
+...
+006 (29686.020.000) 01/30 14:47:01 Image size of job updated: 35988
+	36  -  MemoryUsage of job (MB)
+	35988  -  ResidentSetSize of job (KB)
+...
+006 (29686.020.000) 01/30 14:52:01 Image size of job updated: 36004
+	36  -  MemoryUsage of job (MB)
+	36004  -  ResidentSetSize of job (KB)
+...
+006 (29686.020.000) 01/30 14:57:02 Image size of job updated: 36144
+	36  -  MemoryUsage of job (MB)
+	36144  -  ResidentSetSize of job (KB)
+...
+005 (29686.020.000) 01/30 15:08:46 Job terminated.
+	(1) Normal termination (return value 0)
+		Usr 0 01:16:52, Sys 0 00:00:01  -  Run Remote Usage
+		Usr 0 00:00:00, Sys 0 00:00:00  -  Run Local Usage
+		Usr 0 01:16:52, Sys 0 00:00:01  -  Total Remote Usage
+		Usr 0 00:00:00, Sys 0 00:00:00  -  Total Local Usage
+	0  -  Run Bytes Sent By Job
+	0  -  Run Bytes Received By Job
+	0  -  Total Bytes Sent By Job
+	0  -  Total Bytes Received By Job
+	Partitionable Resources :    Usage  Request Allocated 
+	   Cpus                 :     1.00        1         1 
+	   Disk (KB)            :     1           1    254050 
+	   Memory (MB)          :    36           1      1005 
+...

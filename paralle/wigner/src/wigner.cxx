@@ -63,7 +63,7 @@ double wignerdst_Integrand(double *x, double *par);
 int main(int argc, char *argv[])
 {
 	char *file=argv[1];
-	char filepath[100];
+	char filepath[520];
 	sprintf(filepath,"./stateinfo/%s.root",file);
 	TFile *read=new TFile(filepath,"read");
 	if(readinfo(read,filepath))return 1;
@@ -87,11 +87,11 @@ int main(int argc, char *argv[])
 
 	TF2 *wigdstInte=new TF2("wignerdst_Integrand",wignerdst_Integrand,0,50,0,Pi,3);
 
-	int l=atoi(argv[2])+1;
-	double thetal=thetamin+dtheta*l;
+	int tl=atof(argv[2])+1;
+	double thetal=thetamin+dtheta*(tl-0.5);
 	
-	char plotname[100];
-	sprintf(plotname,"wigdst_thetal_%d",l);
+	char plotname[500];
+	sprintf(plotname,"wigdst_thetal_%d",tl);
 	TH2D wigdst(plotname,"wigner density plot",Nr,rmin,rmax,Np,pmin,pmax);
 
 	double process=0;
@@ -109,20 +109,18 @@ int main(int argc, char *argv[])
 			cout<<"precess: "<<process*10<<"%"<<endl;
 		}
 
+		double ri=wigdst.GetXaxis()->GetBinCenter(i);
 #ifdef scale
-		double ri=exp(rmin+dr*i)*aBorhr;
-#else
-		double ri=rmin+dr*i;
+		ri=exp(ri)*aBorhr;
 #endif
 
 		//double resMax=0;
 
 		for(int j=1;j<=Nr;j++)
 		{
+			double pj=wigdst.GetYaxis()->GetBinCenter(j);
 #ifdef scale
-			double pj=exp(pmin+dp*j)*ku;
-#else
-			double pj=pmin+dp*j;
+			pj=exp(pj)*ku;
 #endif
 			pj*=fmmev;
 
@@ -150,11 +148,11 @@ int main(int argc, char *argv[])
 		}
 	}
 
-	char savepath[100];
+	char savepath[500];
 #ifdef scale
-	sprintf(savepath,"./wigdst/%s_thetal_%d-scaled.root",file,l);
+	sprintf(savepath,"./wigdst/%s/%s_thetal_%d-scaled.root",file,file,tl);
 #else
-	sprintf(savepath,"./wigdst/%s_thetal_%d.root",file,l);
+	sprintf(savepath,"./wigdst/%s/%s_thetal_%d.root",file,file,tl);
 #endif
 	TFile save(savepath,"recreate");
 	if(save.IsZombie())
@@ -208,7 +206,7 @@ int select()
 		for(int n1=nstart;n1<=nstart+nmax;n1++)
 		{
 			double par1=function_parameter->GetBinContent(iNc1+(n1-nstart)*angnum);
-			if(abs(par1)<=0.1)continue;
+			if(abs(par1)<=0.11)continue;
 			//cout<<i<<" "<<n1<<" "<<q1<<" "<<lx1<<" "<<ly1<<endl;
 			if(q1!=0||lx1!=0||ly1!=0)return -1;
 			state_select[i][0]=n1;
@@ -261,7 +259,7 @@ double wignerdst_Integrand(double *x,double *par)//no angle relate
 
 	//exp(-I*vec_p*vec_y)=exp(-I*p*sin(theta)*y*sin(theta_y1)*cos(theta_y2)-I*p*cos(theta)*y*cos(theta_y1))
 	double res2=4*(sin(p*sin(theta)*y*sin(theta_y1))-p*sin(theta)*y*sin(theta_y1)*cos(p*sin(theta)*y*sin(theta_y1)))/pow(p*sin(theta)*y*sin(theta_y1),3);
-	//equal to Integreat[exp(-I*p*sin(theta)*y*sin(theta_y1)*cos(theta_y2))*pow(sin(theta_y2),3),{theta_y2,0,Pi}]
+	//equal to Integrate[exp(-I*p*sin(theta)*y*sin(theta_y1)*cos(theta_y2))*pow(sin(theta_y2),3),{theta_y2,0,Pi}]
 	//theta_y2 is the angle between y and rp-plane
 	//cout<<"res2: "<<res2<<endl;
 	res*=res2;
@@ -272,7 +270,7 @@ double wignerdst_Integrand(double *x,double *par)//no angle relate
 
 	res*=pow(y,5)*pow(sin(theta_y1),4)*2*Pi*Pi;//volume element of hyper-spherical coordinate (y,theta_y1,theta_y2,theta_y3,theta_y4,phi_y);
 
-	//res/=pow(2.*Pi,6);//fourie transform normalization coefficient
+	res/=pow(2.*Pi,6);//fourie transform normalization coefficient
 
 	//res*=Pi*Pi*Pi*pow(r,5);//volume element of vec_r;
 	//res*=8./3.*Pi*Pi*pow(p,5)*pow(sin(theta),4);//volume element of vec_p;

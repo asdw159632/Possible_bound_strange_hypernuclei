@@ -29,7 +29,7 @@ double hbar = 197.3269788;// MeV fm/c
 double aBorhr=1;//fm
 double ku=1/aBorhr/fmmev;//MeV
 
-
+double pTmax=10;
 double nDst(TLorentzVector vmP, double vTkin, double vrho_0);
 Double_t dN_momentum_BLW(double *x, double *par);
 Double_t dN_coordinates(double *x, double *par);
@@ -38,7 +38,7 @@ Double_t dN_tau(double *x, double *par);
 void coal_p1p2p3(TLorentzVector *vmP_p1, TLorentzVector *vmR_p1, TLorentzVector *vmP_p2, TLorentzVector *vmR_p2, TLorentzVector *vmP_p3, TLorentzVector *vmR_p3, int vnum_p1, int vnum_p2, int vnum_p3);
 double rho_wigner(TLorentzVector *vcompP, TLorentzVector *vcompR);
 
-TH1D *cluster_pT_Dst = new TH1D("cluster_pT_Dst","cluster_pT_Dst",100,0,5);
+TH1D *cluster_pT_Dst = new TH1D("cluster_pT_Dst","cluster_pT_Dst",100,0,pTmax);
 
 Long_t nseed_cmd();
 void executeCMD(const char *cmd, char *result);
@@ -46,6 +46,12 @@ void executeCMD(const char *cmd, char *result);
 int main(int argc, char **argv)
 {
 	cout<<nuclear<<endl;
+#ifdef E2_76TeV
+	cout<<"2.76 TeV"<<endl;
+#endif
+#ifdef E200GeV
+	cout<<"200 GeV"<<endl;
+#endif
 
   Long_t nseedc = nseed_cmd();
   cout<<"global nseedc="<<nseedc<<endl;
@@ -76,14 +82,14 @@ int main(int argc, char **argv)
   //ku = hbar/aBorhr;// MeV/c  for momentum unit
   //init par end
 
-  TH1D *p1_pT_Dst = new TH1D(ti_p1_pT_Dst,ti_p1_pT_Dst,50,0,5);
+  TH1D *p1_pT_Dst = new TH1D(ti_p1_pT_Dst,ti_p1_pT_Dst,50,0,pTmax);
   myList->Add(p1_pT_Dst);
 
-  TH1D *p2_pT_Dst = new TH1D(ti_p2_pT_Dst,ti_p2_pT_Dst,50,0,5);
+  TH1D *p2_pT_Dst = new TH1D(ti_p2_pT_Dst,ti_p2_pT_Dst,50,0,pTmax);
   myList->Add(p2_pT_Dst);
 
 #ifndef ABB
-  TH1D *p3_pT_Dst = new TH1D(ti_p3_pT_Dst,ti_p3_pT_Dst,50,0,5);
+  TH1D *p3_pT_Dst = new TH1D(ti_p3_pT_Dst,ti_p3_pT_Dst,50,0,pTmax);
   myList->Add(p3_pT_Dst);
 #endif
 
@@ -111,31 +117,25 @@ int main(int argc, char **argv)
   double eta_s;
   double phi_s;
 
-#ifdef E2_76TeV
-	double eta_s_range=0.5;
-#endif
-#ifdef E200GeV
-	double eta_s_range=1.5;//for 200GeV, eta_s range from -1.5~1.5 is enough
-#endif
-
-  TF1 *func_pT_p1 = new TF1(ti_func_pT_p1,dN_momentum_BLW,0.,5.,3);
+  TF1 *func_pT_p1 = new TF1(ti_func_pT_p1,dN_momentum_BLW,0.,pTmax,3);
   func_pT_p1->SetParameters(m[0]/fmmev/1000/*GeV*/, Tkin_p1,rho_0_p1);
 
-  TF2 *func_coordinates_p1 = new TF2(ti_func_coordinates_p1,dN_coordinates,0,R0, -eta_s_range,eta_s_range, 7);
+  TF2 *func_coordinates_p1 = new TF2(ti_func_coordinates_p1,dN_coordinates,0,R0, -0.5,0.5, 7);//
+
   cout<<"func_p1 created!!!"<<endl;
 
-  TF1 *func_pT_p2 = new TF1(ti_func_pT_p2,dN_momentum_BLW,0.,5,3);
+  TF1 *func_pT_p2 = new TF1(ti_func_pT_p2,dN_momentum_BLW,0.,pTmax,3);
   func_pT_p2->SetParameters(m[1]/fmmev/1000/*GeV*/, Tkin_p2,rho_0_p2);
 
-  TF2 *func_coordinates_p2 = new TF2(ti_func_coordinates_p2,dN_coordinates,0,R0, -eta_s_range,eta_s_range, 7);
+  TF2 *func_coordinates_p2 = new TF2(ti_func_coordinates_p2,dN_coordinates,0,R0, -0.5,0.5, 7);//
 
   cout<<"func_p2 created!!!"<<endl;
 
 #ifndef ABB
-  TF1 *func_pT_p3 = new TF1(ti_func_pT_p3,dN_momentum_BLW,0.,5,3);
+  TF1 *func_pT_p3 = new TF1(ti_func_pT_p3,dN_momentum_BLW,0.,pTmax,3);
   func_pT_p3->SetParameters(m[2]/fmmev/1000/*GeV*/, Tkin_p3,rho_0_p3);
 
-  TF2 *func_coordinates_p3 = new TF2(ti_func_coordinates_p3,dN_coordinates,0,R0, -eta_s_range,etas_s_range, 7);
+  TF2 *func_coordinates_p3 = new TF2(ti_func_coordinates_p3,dN_coordinates,0,R0, -0.5,0.5, 7);//
 
   cout<<"func_p3 created!!!"<<endl;
 #endif
@@ -257,6 +257,8 @@ int main(int argc, char **argv)
 	fout->Write();
 
 	delete fout;
+
+	return 0;
 }
 
 Double_t dN_momentum_BLW(double *x, double *par)
@@ -411,11 +413,7 @@ void coal_p1p2p3(TLorentzVector *vmP_p1, TLorentzVector *vmR_p1, TLorentzVector 
 		{
 			mP[1] = vmP_p2[j];
 			mR[1] = vmR_p2[j];
-#ifdef ABB
 			for(int l=j+1; l<vnum_p3; l++)
-#else
-			for(int l=0; l<vnum_p3; l++)
-#endif
 			{
 				mP[2] = vmP_p3[l];
 				mR[2] = vmR_p3[l];
@@ -551,6 +549,7 @@ double rho_wigner(TLorentzVector *vcompP, TLorentzVector *vcompR)
 	krho_mag=krho_mag*1000/ku;//GeV->MeV, then scale it
 	krho_mag=log(krho_mag);
 
+	if(rho_mag>2||krho_mag>1)return 0;
   int rBin = rho_density->GetXaxis()->FindBin(rho_mag);
   int kBin = rho_density->GetYaxis()->FindBin(krho_mag);
 	int thetaBin = rho_density->GetZaxis()->FindBin(theta);

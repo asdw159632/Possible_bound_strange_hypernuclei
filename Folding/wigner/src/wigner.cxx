@@ -16,7 +16,7 @@ double par[100]={0};
 double aBorhr=1;//fm
 int Nr=50;
 double rmin=-8;
-double rmax=2;
+double rmax=4;
 double dr=(rmax-rmin)/Nr;
 
 double ku=1/aBorhr/fmmev;//MeV
@@ -58,6 +58,7 @@ int main(int argc, char *argv[])
 		return 1;
 	}
 	read>>c;
+	c*=fmmev;
 	read>>l;
 	read>>nmax;
 	read>>nstart;
@@ -77,18 +78,18 @@ int main(int argc, char *argv[])
 
 	//double parr[]={2.,2.*fmmev};
 	//double x[]={2.,3.,1.};
+	//mega-scaled.root
 	//cout<<wignerdst_Integrand(x,parr)<<endl;
 	//return 0;
 
 	int thetal=atoi(argv[2]);
-	double theta=thetal*dtheta+thetamin;
+	double theta=(thetal+0.5)*dtheta+thetamin;
 
 	for(int i=1;i<=Nr;i++)
 	{
+		double ri=wigdst.GetXaxis()->GetBinCenter(i);
 #ifdef scale
-		double ri=exp(rmin+i*dr)*aBorhr;
-#else
-		double ri=rmin+i*dr;
+		ri=exp(ri)*aBorhr;
 #endif
 
 		if(floor(i*10/Nr)>process)
@@ -102,25 +103,24 @@ int main(int argc, char *argv[])
 		{
 			//clock_t start,end;
 			//start=clock();
+			double pj=wigdst.GetYaxis()->GetBinCenter(j);
 #ifdef scale
-			double pj=exp(pmin+dp*j)*ku;
-#else
-			double pj=pmin+dp*j;
+			pj=exp(pj)*ku;
 #endif
 			pj*=fmmev;
 
 			wigdstInte->SetParameters(ri,pj,theta);
 			double res=wigdstInte->Integral(0.,50.,0.,Pi,1.e-20);
 
-			wigdst.SetBinContent(i,j,l,res);
+			wigdst.SetBinContent(i,j,res);
 		}
 	}
 
-	char savepath[100];
+	char savepath[500];
 #ifdef scale
 	sprintf(savepath,"./wigdst/%s/%s_thetal_%d-scaled.root",file,file,thetal);
 #else
-	sprintf(savepath,"./wigdst/%s/%s_thetal_%d-scaled.root",file,file,thetal);
+	sprintf(savepath,"./wigdst/%s/%s_thetal_%d.root",file,file,thetal);
 #endif
 	TFile save(savepath,"recreate");
 	if(save.IsZombie())
@@ -133,14 +133,14 @@ int main(int argc, char *argv[])
 	return 0;
 }
 
-double wignerdst_Integrand(double *x,double *par)//no angle relate
+double wignerdst_Integrand(double *x,double *parp)//no angle relate
 {
 	double y=x[0];
 	double theta_y=x[1];//the angle between y and r
 
-	double r=par[0];
-	double p=par[1];
-	double theta=par[2];//the angle between r and p
+	double r=parp[0];
+	double p=parp[1];
+	double theta=parp[2];//the angle between r and p
 
 	double rp=sqrt(r*r+y*y/4.-r*y*cos(theta_y));//|vec_r+vec_y/2|
 	double rn=sqrt(r*r+y*y/4.+r*y*cos(theta_y));//|vec_r-vec_y/2|
@@ -150,7 +150,7 @@ double wignerdst_Integrand(double *x,double *par)//no angle relate
 	{
 		for(int n2=nstart;n2<nstop;n2++)
 		{
-			double res1=par[n1]*par[n2]*orthbasis_radial(rp,n1)/pow(rp,1./2.)*orthbasis_radial(rn,n2)/pow(rn,1./2.)*1./(4.*Pi);
+			double res1=par[n1]*par[n2]*orthbasis_radial(rp,n1)/rp*orthbasis_radial(rn,n2)/rn*1./(4.*Pi);
 			res+=res1;
 		}
 	}
@@ -162,7 +162,7 @@ double wignerdst_Integrand(double *x,double *par)//no angle relate
 	double res3=cos(p*cos(theta)*y*cos(theta_y));//real part of exp(-I*p*cos(theta)*y*cos(theta_y))
 	res*=res3;
 
-	res*=pow(y,2)*sin(theta_y)*2*Pi;//volume element of hyper-spherical coordinate (y,theta_y,phi_y);
+	res*=pow(y,2)*sin(theta_y);//volume element of hyper-spherical coordinate (y,theta_y,phi_y);
 
 	return res;
 }

@@ -5,15 +5,18 @@ using namespace std;
 #define E2_76TeV
 //#define E200GeV
 
+#define OO_N
+
 //#include "../../include/H-3.h"
 //#include "../../include/He-3.h"
 //#include "../../include/pnOmega.h"
-#include "../../include/nnOmega.h"
+//#include "../../include/nnOmega.h"
 //#include "../../include/ppOmega.h"
-//#include "../../include/nOmegaOmega.h"
+#include "../../include/nOmegaOmega.h"
 //#include "../../include/pOmegaOmega.h"
 
 TH3D *rho_density_di;
+//TH2D *rho_density_di;
 TH3D *rho_density_tri;
 
 #ifdef E200GeV
@@ -30,6 +33,7 @@ double hbar = 197.3269788;// MeV fm/c
 double aBorhr=1;//fm
 double ku=1/aBorhr/fmmev;//MeV
 
+double pTmax=10;
 
 double nDst(TLorentzVector vmP, double vTkin, double vrho_0);
 Double_t dN_momentum_BLW(double *x, double *par);
@@ -39,7 +43,8 @@ Double_t dN_tau(double *x, double *par);
 void coal_p1p2p3(TLorentzVector *vmP_p1, TLorentzVector *vmR_p1, TLorentzVector *vmP_p2, TLorentzVector *vmR_p2, TLorentzVector *vmP_p3, TLorentzVector *vmR_p3, int vnum_p1, int vnum_p2, int vnum_p3);
 double rho_wigner(TLorentzVector vcompP1, TLorentzVector vcompP2, TLorentzVector vcompR1, TLorentzVector vcompR2, TH3D *rho_density);
 
-TH1D *cluster_pT_Dst = new TH1D("cluster_pT_Dst","cluster_pT_Dst",100,0,5);
+TH1D *cluster_pT_Dst = new TH1D("cluster_pT_Dst","cluster_pT_Dst",100,0,pTmax);
+TH1D *dibaryon_pT_Dst = new TH1D("dibaryon_pT_Dst","dibaryon_pT_Dst",100,0,pTmax);
 
 Long_t nseed_cmd();
 void executeCMD(const char *cmd, char *result);
@@ -47,6 +52,15 @@ void executeCMD(const char *cmd, char *result);
 int main(int argc, char **argv)
 {
 	cout<<nuclear<<endl;
+#ifdef E2_76TeV
+	cout<<"2.76 TeV"<<endl;
+#endif
+#ifdef E200GeV
+	cout<<"200 GeV"<<endl;
+#endif
+#ifdef OO_N
+	cout<<"OO_N"<<endl;
+#endif
 
   Long_t nseedc = nseed_cmd();
   cout<<"global nseedc="<<nseedc<<endl;
@@ -63,6 +77,7 @@ int main(int argc, char **argv)
 
   char inRhoDir_di[512];
   sprintf(inRhoDir_di,"%s/wigdst/%s.root",workDir,target_di);
+  //sprintf(inRhoDir_di,"./out_phi_rho.root",workDir);
   TFile fin_di(inRhoDir_di);
 	if(fin_di.IsZombie())
 	{
@@ -70,13 +85,14 @@ int main(int argc, char **argv)
 		return 0;
 	}
   rho_density_di = (TH3D *) fin_di.Get("wigdst");
+  //rho_density_di = (TH2D *) fin_di.Get("rho");
 
   char inRhoDir_tri[512];
   sprintf(inRhoDir_tri,"%s/wigdst/%s.root",workDir,target_tri);
   TFile fin_tri(inRhoDir_tri);
 	if(fin_tri.IsZombie())
 	{
-		cerr<<"Error: file open error, please check exec.sh target-tri_body";
+		cerr<<"Error: file open error, please check exec.sh target_tri_body";
 		return 0;
 	}
   rho_density_tri = (TH3D *) fin_tri.Get("wigdst");
@@ -87,22 +103,23 @@ int main(int argc, char **argv)
   //ku = hbar/aBorhr;// MeV/c  for momentum unit
   //init par end
 
-  TH1D *p1_pT_Dst = new TH1D(ti_p1_pT_Dst,ti_p1_pT_Dst,50,0,5);
+  TH1D *p1_pT_Dst = new TH1D(ti_p1_pT_Dst,ti_p1_pT_Dst,50,0,pTmax);
   myList->Add(p1_pT_Dst);
 
-  TH1D *p2_pT_Dst = new TH1D(ti_p2_pT_Dst,ti_p2_pT_Dst,50,0,5);
+  TH1D *p2_pT_Dst = new TH1D(ti_p2_pT_Dst,ti_p2_pT_Dst,50,0,pTmax);
   myList->Add(p2_pT_Dst);
 
 #ifndef ABB
-  TH1D *p3_pT_Dst = new TH1D(ti_p3_pT_Dst,ti_p3_pT_Dst,50,0,5);
+  TH1D *p3_pT_Dst = new TH1D(ti_p3_pT_Dst,ti_p3_pT_Dst,50,0,pTmax);
   myList->Add(p3_pT_Dst);
 #endif
 
   myList->Add(cluster_pT_Dst);
+  myList->Add(dibaryon_pT_Dst);
   
   double dpT = p1_pT_Dst->GetBinWidth(1);
 
-  const int numEvt=100000;
+  const int numEvt=10000;
 
   TLorentzVector mP_p1[num_p1];
   TLorentzVector mR_p1[num_p1];
@@ -129,13 +146,13 @@ int main(int argc, char **argv)
 	double eta_s_range=1.5;//for 200GeV, eta_s range from -1.5~1.5 is enough
 #endif
 
-  TF1 *func_pT_p1 = new TF1(ti_func_pT_p1,dN_momentum_BLW,0.,5.,3);
+  TF1 *func_pT_p1 = new TF1(ti_func_pT_p1,dN_momentum_BLW,0.,pTmax,3);
   func_pT_p1->SetParameters(m[0]/fmmev/1000/*GeV*/, Tkin_p1,rho_0_p1);
 
   TF2 *func_coordinates_p1 = new TF2(ti_func_coordinates_p1,dN_coordinates,0,R0, -eta_s_range,eta_s_range, 7);
   cout<<"func_p1 created!!!"<<endl;
 
-  TF1 *func_pT_p2 = new TF1(ti_func_pT_p2,dN_momentum_BLW,0.,5,3);
+  TF1 *func_pT_p2 = new TF1(ti_func_pT_p2,dN_momentum_BLW,0.,pTmax,3);
   func_pT_p2->SetParameters(m[1]/fmmev/1000/*GeV*/, Tkin_p2,rho_0_p2);
 
   TF2 *func_coordinates_p2 = new TF2(ti_func_coordinates_p2,dN_coordinates,0,R0, -eta_s_range,eta_s_range, 7);
@@ -143,7 +160,7 @@ int main(int argc, char **argv)
   cout<<"func_p2 created!!!"<<endl;
 
 #ifndef ABB
-  TF1 *func_pT_p3 = new TF1(ti_func_pT_p3,dN_momentum_BLW,0.,5,3);
+  TF1 *func_pT_p3 = new TF1(ti_func_pT_p3,dN_momentum_BLW,0.,pTmax,3);
   func_pT_p3->SetParameters(m[2]/fmmev/1000/*GeV*/, Tkin_p3,rho_0_p3);
 
   TF2 *func_coordinates_p3 = new TF2(ti_func_coordinates_p3,dN_coordinates,0,R0, -eta_s_range,etas_s_range, 7);
@@ -424,7 +441,12 @@ void coal_p1p2p3(TLorentzVector *vmP_p1, TLorentzVector *vmR_p1, TLorentzVector 
 		{
 			mP[1] = vmP_p2[j];
 			mR[1] = vmR_p2[j];
+#ifndef OO_N
+			mP_p1p2.SetVectM((mP[0] + mP[1]).Vect(), (m[0]+m[1])/fmmev/1000/*GeV*/);
 			rho_W_di = rho_wigner(mP[0], mP[1], mR[0], mR[1],rho_density_di);
+			if(fabs(mP_p1p2.Rapidity())>0.5 && mP_p1p2.Pt()<1.e-7)
+				dibaryon_pT_Dst->Fill(mP_p1p2.Pt(), 1./(2.*Pi*mP_p1p2.Pt()*dpT) * rho_W_di * 5./8.);
+#endif
 #ifdef ABB
 			for(int l=j+1; l<vnum_p3; l++)
 #else
@@ -433,14 +455,24 @@ void coal_p1p2p3(TLorentzVector *vmP_p1, TLorentzVector *vmR_p1, TLorentzVector 
 			{
 				mP[2] = vmP_p3[l];
 				mR[2] = vmR_p3[l];
+#ifdef OO_N
+			mP_p1p2.SetVectM((mP[1] + mP[2]).Vect(), (m[1]+m[2])/fmmev/1000/*GeV*/);
+			rho_W_di = rho_wigner(mP[1], mP[2], mR[1], mR[2],rho_density_di);
+			if( i==0/*avoid re-Fill dibaryon; only Fill once*/ && fabs(mP_p1p2.Rapidity())>0.5 && mP_p1p2.Pt()<1.e-7)
+				dibaryon_pT_Dst->Fill(mP_p1p2.Pt(), 1./(2.*Pi*mP_p1p2.Pt()*dpT) * rho_W_di * 1./16.);
+#endif
 
 				mP_p1p2p3.SetVectM((mP[0] + mP[1] + mP[2]).Vect(), M/fmmev/1000/*GeV*/);
-				//if(mP_p1p2p3.Pt()<1.e-7) continue;
+				if(mP_p1p2p3.Pt()<1.e-7) continue;
 				if(fabs(mP_p1p2p3.Rapidity())>0.5) continue;
-
+#ifdef OO_N
+				rho_W_tri = rho_wigner(mP[1]+mP[2],mP[0], 1./(m[1]+m[2])*(m[1]*mR[1]+m[2]*mR[2]),mR[0],rho_density_tri);
+#else
 				rho_W_tri = rho_wigner(mP[0]+mP[1],mP[2], 1./(m[0]+m[1])*(m[0]*mR[0]+m[1]*mR[1]),mR[2],rho_density_tri);
+#endif
 				//if(rho_W<1e-20) continue;
 				//if(rho_W>1e-5)cout<<"Fill: "<<mP_p1p2p3.Pt()<<" "<<1./(2.*Pi*mP_p1p2p3.Pt()*dpT) * rho_W * GA<<endl;
+				//cout<<"di:"<<rho_W_di<<" tri:"<<rho_W_tri<<endl;
 
 				cluster_pT_Dst->Fill(mP_p1p2p3.Pt(), 1./(2.*Pi*mP_p1p2p3.Pt()*dpT) * rho_W_di * rho_W_tri* GA);
 			}
@@ -526,12 +558,12 @@ double rho_wigner(TLorentzVector vcompP1, TLorentzVector vcompP2, TLorentzVector
 
   //convert to unit used in phi-wave function and rho-densoty
 
-	TVector3 rho=1./M_in*(-pcpt1R3cm + pcpt2R3cm);
+	TVector3 rho=(-pcpt1R3cm + pcpt2R3cm);
 	double rho_mag=rho.Mag();//fm
 
 //  cout<<"rho_mag="<<rho_mag<<endl;
 
-	TVector3 krho=1./M_in*(-m2*pcpt1P3cm + m1*pcpt1P3cm);
+	TVector3 krho=1./M_in*(-m2*pcpt1P3cm + m1*pcpt2P3cm);
   double krho_mag = krho.Mag();//GeV
 
 	double theta=acos(( rho.Dot(krho) )/(rho_mag*krho_mag));
