@@ -444,7 +444,7 @@ void coal_p1p2p3(TLorentzVector *vmP_p1, TLorentzVector *vmR_p1, TLorentzVector 
 #ifndef OO_N
 			mP_p1p2.SetVectM((mP[0] + mP[1]).Vect(), (m[0]+m[1])/fmmev/1000/*GeV*/);
 			rho_W_di = rho_wigner(mP[0], mP[1], mR[0], mR[1],rho_density_di);
-			if(fabs(mP_p1p2.Rapidity())>0.5 && mP_p1p2.Pt()<1.e-7)
+			if(fabs(mP_p1p2.Rapidity())<0.5 && mP_p1p2.Pt()>1.e-7)
 				dibaryon_pT_Dst->Fill(mP_p1p2.Pt(), 1./(2.*Pi*mP_p1p2.Pt()*dpT) * rho_W_di * 5./8.);
 #endif
 #ifdef ABB
@@ -458,7 +458,7 @@ void coal_p1p2p3(TLorentzVector *vmP_p1, TLorentzVector *vmR_p1, TLorentzVector 
 #ifdef OO_N
 			mP_p1p2.SetVectM((mP[1] + mP[2]).Vect(), (m[1]+m[2])/fmmev/1000/*GeV*/);
 			rho_W_di = rho_wigner(mP[1], mP[2], mR[1], mR[2],rho_density_di);
-			if( i==0/*avoid re-Fill dibaryon; only Fill once*/ && fabs(mP_p1p2.Rapidity())>0.5 && mP_p1p2.Pt()<1.e-7)
+			if( i==0/*avoid re-Fill dibaryon; only Fill once*/ && fabs(mP_p1p2.Rapidity())<0.5 && mP_p1p2.Pt()>1.e-7)
 				dibaryon_pT_Dst->Fill(mP_p1p2.Pt(), 1./(2.*Pi*mP_p1p2.Pt()*dpT) * rho_W_di * 1./16.);
 #endif
 
